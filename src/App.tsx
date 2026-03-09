@@ -19,6 +19,7 @@ import ZeroWasteGuide from "./pages/ZeroWasteGuide";
 import MyPage from "./pages/MyPage";
 import ProfileEdit from "./pages/ProfileEdit";
 import NotificationSettings from "./pages/NotificationSettings";
+import FamilyLink from "./pages/FamilyLink";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
