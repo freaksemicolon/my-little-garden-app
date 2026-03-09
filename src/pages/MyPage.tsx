@@ -155,8 +155,8 @@ const MyPage = () => {
           <div className="w-[120px] h-[120px] rounded-full bg-[hsl(160,20%,18%)] flex items-center justify-center mb-3">
             <span className="text-[48px]">{currentUser.avatar}</span>
           </div>
-          <h2 className="text-[22px] font-bold text-foreground">김{currentUser.name}</h2>
-          <p className="text-[13px] text-muted-foreground mt-1">*****@gmail.com</p>
+          <h2 className="text-[22px] font-bold text-foreground">{userInfo.nickname}</h2>
+          <p className="text-[13px] text-muted-foreground mt-1">{userInfo.email}</p>
         </div>
 
         {/* 3 Tab Buttons */}

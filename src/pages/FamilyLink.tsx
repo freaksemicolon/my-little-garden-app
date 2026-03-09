@@ -2,12 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Bell, Share2, Link2, Download } from "lucide-react";
 import { currentUser, familyMembers } from "@/data/mockData";
 import BottomNavigation from "@/components/BottomNavigation";
+import { useUser } from "@/contexts/UserContext";
 
 const FamilyLink = () => {
   const navigate = useNavigate();
+  const { userInfo } = useUser();
 
   const allMembers = [
-    { name: `김${currentUser.name}`, email: "*****@gmail.com", level: `Lv. ${currentUser.level} 펼쳐지는 떡잎`, isStar: true },
+    { name: userInfo.nickname, email: userInfo.email, level: `Lv. ${currentUser.level} 펼쳐지는 떡잎`, isStar: true },
     ...familyMembers.map((m) => ({
       name: m.name,
       email: "",
