@@ -84,6 +84,8 @@ const PlantRegister = () => {
     }
 
     try {
+      const imageUrl = await uploadImage();
+
       if (isEdit && id) {
         await updatePlant.mutateAsync({
           id,
@@ -93,6 +95,7 @@ const PlantRegister = () => {
           watering_cycle: parseInt(cycleNum) || 7,
           watering_unit: cycleUnit,
           memo: memo.trim(),
+          ...(imageUrl !== undefined && { image_url: imageUrl }),
         });
         toast({ title: "수정이 완료되었습니다" });
         navigate(`/plant/${id}`);
@@ -104,6 +107,7 @@ const PlantRegister = () => {
           watering_cycle: parseInt(cycleNum) || 7,
           watering_unit: cycleUnit,
           memo: memo.trim(),
+          image_url: imageUrl || undefined,
         });
         toast({ title: "등록이 완료되었습니다! 🌱" });
         navigate(`/plant/${data.id}`);
