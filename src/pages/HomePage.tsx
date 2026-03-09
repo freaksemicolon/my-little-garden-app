@@ -11,6 +11,7 @@ const notifications = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const { profile } = useAuth();
   const displayName = profile?.nickname || currentUser.name;
   const [currentSlide, setCurrentSlide] = useState(0);
