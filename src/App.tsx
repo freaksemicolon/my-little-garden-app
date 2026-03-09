@@ -21,12 +21,14 @@ import ProfileEdit from "./pages/ProfileEdit";
 import NotificationSettings from "./pages/NotificationSettings";
 import FamilyLink from "./pages/FamilyLink";
 import NotFound from "./pages/NotFound";
+import { UserProvider } from "./contexts/UserContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <UserProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
