@@ -24,6 +24,10 @@ const PlantRegister = () => {
   const [cycleUnit, setCycleUnit] = useState(existingPlant?.watering_unit || "일");
   const [memo, setMemo] = useState(existingPlant?.memo || "");
   const [showUnitDropdown, setShowUnitDropdown] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(existingPlant?.image_url || null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Sync form when existingPlant loads
   useState(() => {
