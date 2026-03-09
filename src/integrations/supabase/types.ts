@@ -105,6 +105,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      is_family_member: {
+        Args: { p_group_id: string; p_user_id: string }
+        Returns: boolean
+      }
       join_family_by_code: { Args: { p_invite_code: string }; Returns: string }
     }
     Enums: {
