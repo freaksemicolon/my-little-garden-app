@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { Bell, X } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { currentUser, plantsData } from "@/data/mockData";
+import { useAuth } from "@/contexts/AuthContext";
 
 const notifications = [
   { id: 1, type: "메세지 1건", text: "몬몬이 : 이제 물을 줄 시간이에요!", time: "11:54 AM", unread: true },
-  { id: 2, type: "물주기💧", text: "아빠 님이 몬몬이에게 물을 주었어요!", time: "2:33 PM", unread: true },
+  { id: 2, type: "물주기", text: "아빠 님이 몬몬이에게 물을 주었어요!", time: "2:33 PM", unread: true },
 ];
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { profile } = useAuth();
+  const displayName = profile?.nickname || currentUser.name;
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
   const touchStartX = useRef(0);
@@ -77,14 +80,17 @@ const HomePage = () => {
         {/* Greeting */}
         <div className="flex items-center gap-2 mt-2">
           <span className="text-[28px]">🌳</span>
-          <h2 className="text-[20px] font-bold text-primary">안녕하세요, {currentUser.name} 님!</h2>
+          <h2 className="text-[20px] font-bold text-primary">
+            {`안녕하세요, ${displayName} 님!`}
+          </h2>
         </div>
 
         {hasPlants ? (
           <>
             <p className="text-[14px] text-muted-foreground mt-1 leading-relaxed">
-              오늘도 싱그러운 초록빛 식물들과 함께하며{"\n"}
-              교감하는 {currentUser.name}님만의 소중한 시간을 응원할게요.
+              {`오늘도 싱그러운 초록빛 식물들과 함께하며`}
+              {"\n"}
+              {`교감하는 ${displayName}님만의 소중한 시간을 응원할게요.`}
             </p>
 
             {/* Plant Card Carousel */}
@@ -165,11 +171,11 @@ const HomePage = () => {
             </div>
           </>
         ) : (
-          /* Empty State */
           <>
             <p className="text-[14px] text-muted-foreground mt-2 text-center leading-relaxed">
-              아직 등록된 식물이 없어요!{"\n"}
-              식물을 등록하고, 나만의 정원을 가꿔보세요.
+              {`아직 등록된 식물이 없어요!`}
+              {"\n"}
+              {`식물을 등록하고, 나만의 정원을 가꿔보세요.`}
             </p>
 
             <div className="flex flex-col gap-4 mt-8">
@@ -178,14 +184,18 @@ const HomePage = () => {
                 className="bg-card rounded-[20px] shadow-card py-10 flex flex-col items-center gap-3"
               >
                 <span className="text-[48px]">🔍</span>
-                <span className="text-[16px] font-bold text-foreground">나에게 맞는 식물{"\n"}추천받기</span>
+                <span className="text-[16px] font-bold text-foreground">
+                  {`나에게 맞는 식물`}{"\n"}{`추천받기`}
+                </span>
               </button>
               <button
                 onClick={() => navigate("/plant-register")}
                 className="bg-card rounded-[20px] shadow-card py-10 flex flex-col items-center gap-3"
               >
                 <span className="text-[48px]">📷</span>
-                <span className="text-[16px] font-bold text-foreground">이미 키우는 식물{"\n"}등록하기</span>
+                <span className="text-[16px] font-bold text-foreground">
+                  {`이미 키우는 식물`}{"\n"}{`등록하기`}
+                </span>
               </button>
             </div>
           </>
