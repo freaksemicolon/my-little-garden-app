@@ -185,7 +185,7 @@ const FamilyLink = () => {
     }
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
         <div className="flex-1 flex items-center justify-center">
