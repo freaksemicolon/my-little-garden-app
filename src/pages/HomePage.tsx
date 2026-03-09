@@ -80,7 +80,7 @@ const HomePage = () => {
         {/* Greeting */}
         <div className="flex items-center gap-2 mt-2">
           <span className="text-[28px]">🌳</span>
-          <h2 className="text-[20px] font-bold text-primary">안녕하세요, {currentUser.name} 님!</h2>
+          <h2 className="text-[20px] font-bold text-primary">안녕하세요, {displayName} 님!</h2>
         </div>
 
         {hasPlants ? (
