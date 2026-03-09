@@ -38,8 +38,32 @@ const PlantRegister = () => {
       setCycleNum(existingPlant.watering_cycle.toString());
       setCycleUnit(existingPlant.watering_unit);
       setMemo(existingPlant.memo || "");
+      if (existingPlant.image_url) setImagePreview(existingPlant.image_url);
     }
   });
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "5MB 이하의 이미지만 업로드 가능합니다", variant: "destructive" });
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile || !user) return existingPlant?.image_url || null;
+    const ext = imageFile.name.split(".").pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    setUploading(true);
+    const { error } = await supabase.storage.from("plant-images").upload(path, imageFile);
+    setUploading(false);
+    if (error) throw error;
+    const { data } = supabase.storage.from("plant-images").getPublicUrl(path);
+    return data.publicUrl;
+  };
 
   const formatKoreanDate = (dateStr: string) => {
     if (!dateStr) return "";
