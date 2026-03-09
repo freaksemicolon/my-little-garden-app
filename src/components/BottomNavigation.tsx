@@ -21,7 +21,7 @@ const BottomNavigation = () => {
           />
           <span
             className={`text-[11px] font-medium ${
-              isActive("/my-plants") ? "text-primary" : "text-muted-foreground"
+              isActive("/home") ? "text-primary" : "text-muted-foreground"
             }`}
           >
             전체 케어
