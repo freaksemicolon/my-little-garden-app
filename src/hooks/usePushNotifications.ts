@@ -66,7 +66,7 @@ export function usePushNotifications() {
       const reg = await navigator.serviceWorker.ready;
       const subscription = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey,
+        applicationServerKey: applicationServerKey.buffer as ArrayBuffer,
       });
 
       // Send subscription to server
