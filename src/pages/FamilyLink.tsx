@@ -23,7 +23,7 @@ interface FamilyGroup {
 
 const FamilyLink = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [group, setGroup] = useState<FamilyGroup | null>(null);
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [joinCode, setJoinCode] = useState("");
@@ -32,62 +32,93 @@ const FamilyLink = () => {
 
   const fetchFamilyData = async () => {
     if (!user) {
+      setGroup(null);
+      setMembers([]);
       setLoading(false);
       return;
     }
 
-    // Find user's family group
-    const { data: memberData } = await supabase
-      .from("family_members")
-      .select("group_id")
-      .eq("user_id", user.id)
-      .limit(1);
+    setLoading(true);
 
-    if (memberData && memberData.length > 0) {
+    try {
+      // Find user's family group
+      const { data: memberData, error: memberError } = await supabase
+        .from("family_members")
+        .select("group_id")
+        .eq("user_id", user.id)
+        .limit(1);
+
+      if (memberError) throw memberError;
+
+      if (!memberData || memberData.length === 0) {
+        setGroup(null);
+        setMembers([]);
+        return;
+      }
+
       const groupId = memberData[0].group_id;
 
       // Fetch group info
-      const { data: groupData } = await supabase
+      const { data: groupData, error: groupError } = await supabase
         .from("family_groups")
         .select("*")
         .eq("id", groupId)
         .single();
 
+      if (groupError) throw groupError;
       if (groupData) setGroup(groupData);
 
       // Fetch members with profiles
-      const { data: membersData } = await supabase
+      const { data: membersData, error: membersError } = await supabase
         .from("family_members")
         .select("user_id, role")
         .eq("group_id", groupId);
 
+      if (membersError) throw membersError;
+
       if (membersData) {
-        const memberProfiles: FamilyMember[] = [];
-        for (const m of membersData) {
-          const { data: p } = await supabase
-            .from("profiles")
-            .select("nickname, email")
-            .eq("user_id", m.user_id)
-            .single();
-          memberProfiles.push({
-            user_id: m.user_id,
-            role: m.role,
-            nickname: p?.nickname || "사용자",
-            email: p?.email || "",
-          });
-        }
+        const memberProfiles = await Promise.all(
+          membersData.map(async (m) => {
+            const { data: p } = await supabase
+              .from("profiles")
+              .select("nickname, email")
+              .eq("user_id", m.user_id)
+              .maybeSingle();
+
+            return {
+              user_id: m.user_id,
+              role: m.role,
+              nickname: p?.nickname || "사용자",
+              email: p?.email || "",
+            };
+          })
+        );
+
         setMembers(memberProfiles);
       }
+    } catch (error: any) {
+      toast({
+        title: "가족 정보 불러오기 실패",
+        description: error?.message || "잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
+    if (authLoading) return;
     fetchFamilyData();
-  }, [user]);
+  }, [user, authLoading]);
 
   const createFamily = async () => {
-    if (!user) return;
+    if (!user) {
+      toast({ title: "로그인이 필요합니다", description: "로그인 후 다시 시도해주세요.", variant: "destructive" });
+      navigate("/login");
+      return;
+    }
+
     const { data, error } = await supabase
       .from("family_groups")
       .insert({ owner_id: user.id })
@@ -100,23 +131,36 @@ const FamilyLink = () => {
     }
 
     // Add self as member (owner)
-    await supabase.from("family_members").insert({
+    const { error: memberInsertError } = await supabase.from("family_members").insert({
       group_id: data.id,
       user_id: user.id,
       role: "owner",
     });
+
+    if (memberInsertError) {
+      toast({ title: "가족 멤버 등록 실패", description: memberInsertError.message, variant: "destructive" });
+      return;
+    }
 
     toast({ title: "가족 정원이 생성되었습니다! 🌿" });
     fetchFamilyData();
   };
 
   const joinFamily = async () => {
+    if (!user) {
+      toast({ title: "로그인이 필요합니다", description: "로그인 후 다시 시도해주세요.", variant: "destructive" });
+      navigate("/login");
+      return;
+    }
+
     if (!joinCode.trim()) return;
+
     const { error } = await supabase.rpc("join_family_by_code", { p_invite_code: joinCode.trim() });
     if (error) {
       toast({ title: "참여 실패", description: error.message, variant: "destructive" });
       return;
     }
+
     toast({ title: "가족 정원에 참여했습니다! 🎉" });
     setShowJoinModal(false);
     setJoinCode("");
@@ -141,7 +185,7 @@ const FamilyLink = () => {
     }
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
         <div className="flex-1 flex items-center justify-center">
