@@ -49,6 +49,7 @@ const App = () => (
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/profile-edit" element={<ProfileEdit />} />
           <Route path="/notification-settings" element={<NotificationSettings />} />
+          <Route path="/family-link" element={<FamilyLink />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
