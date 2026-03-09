@@ -1,17 +1,53 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Edit3, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronLeft, Edit3, Droplets } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
-import { plantsData } from "@/data/mockData";
+import { usePlant, useWaterPlant, getWateringStatusFromPlant } from "@/hooks/usePlants";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
+import plantSucculent from "@/assets/plant-succulent.png";
 
 const PlantDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const plant = plantsData.find((p) => p.id === id) || plantsData[0];
-  const [expandedLog, setExpandedLog] = useState(0);
+  const { user } = useAuth();
+  const { data: plant, isLoading } = usePlant(id);
+  const waterPlant = useWaterPlant();
 
-  const adoptionDate = new Date(plant.adoptionDate);
-  const dateStr = `${adoptionDate.getFullYear()}년 ${String(adoptionDate.getMonth() + 1).padStart(2, "0")}월 ${String(adoptionDate.getDate()).padStart(2, "0")}일부터 함께하는 중`;
+  if (isLoading) {
+    return (
+      <div className="mobile-container flex flex-col min-h-screen bg-background items-center justify-center">
+        <p className="text-muted-foreground">불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (!plant) {
+    return (
+      <div className="mobile-container flex flex-col min-h-screen bg-background items-center justify-center">
+        <p className="text-muted-foreground mb-4">식물을 찾을 수 없습니다</p>
+        <button onClick={() => navigate("/home")} className="text-primary font-semibold">
+          홈으로 가기
+        </button>
+      </div>
+    );
+  }
+
+  const plantImage = plant.image_url || plantSucculent;
+  const adoptionDate = plant.adoption_date ? new Date(plant.adoption_date) : null;
+  const dateStr = adoptionDate
+    ? `${adoptionDate.getFullYear()}년 ${String(adoptionDate.getMonth() + 1).padStart(2, "0")}월 ${String(adoptionDate.getDate()).padStart(2, "0")}일부터 함께하는 중`
+    : "함께하는 중";
+  const waterStatus = getWateringStatusFromPlant(plant);
+
+  const handleWater = async () => {
+    try {
+      await waterPlant.mutateAsync(plant.id);
+      toast({ title: `${plant.nickname}에게 물을 주었어요! 💧` });
+    } catch (e: any) {
+      toast({ title: "물주기 실패", description: e.message, variant: "destructive" });
+    }
+  };
 
   return (
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
@@ -31,7 +67,7 @@ const PlantDetail = () => {
       {/* Plant Hero */}
       <div className="bg-beige-gradient px-5 pt-4 pb-6 flex flex-col items-center">
         <div className="w-[180px] h-[180px] rounded-full bg-accent/50 flex items-center justify-center">
-          <img src={plant.image} alt={plant.nickname} className="w-[140px] h-[140px] object-contain" />
+          <img src={plantImage} alt={plant.nickname} className="w-[140px] h-[140px] object-contain" />
         </div>
         <h2 className="text-[22px] font-bold text-foreground mt-4">{plant.nickname}</h2>
         <p className="text-[14px] text-muted-foreground mt-1">{plant.species}</p>
@@ -39,54 +75,66 @@ const PlantDetail = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 pt-4">
-        {/* Memo Card */}
-        <div className="bg-card rounded-[16px] shadow-card p-4 mb-4 flex items-start gap-3">
-          <span className="text-[28px]">📋</span>
-          <div>
-            <h3 className="text-[15px] font-bold text-foreground">{plant.nickname}를 위한 메모</h3>
-            <p className="text-[13px] text-muted-foreground mt-1">{plant.memo}</p>
+        {/* Water Status */}
+        <div className="bg-card rounded-[16px] shadow-card p-4 mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-[28px]">💧</span>
+            <div>
+              <h3 className="text-[15px] font-bold text-foreground">물주기 상태</h3>
+              <p className="text-[13px] text-muted-foreground mt-0.5">
+                {plant.watering_cycle}{plant.watering_unit} 주기 · {waterStatus.status}
+              </p>
+            </div>
           </div>
+          <button
+            onClick={handleWater}
+            disabled={waterPlant.isPending}
+            className="flex items-center gap-1 px-4 py-2 rounded-[12px] bg-primary text-primary-foreground text-[13px] font-medium disabled:opacity-50"
+          >
+            <Droplets size={14} />
+            물주기
+          </button>
         </div>
 
-        {/* Activity Log Card */}
-        <div className="bg-card rounded-[16px] shadow-card p-4">
-          <div className="flex items-start gap-3 mb-3">
-            <span className="text-[28px]">🌱</span>
+        {/* Memo Card */}
+        {plant.memo && (
+          <div className="bg-card rounded-[16px] shadow-card p-4 mb-4 flex items-start gap-3">
+            <span className="text-[28px]">📋</span>
             <div>
-              <h3 className="text-[15px] font-bold text-foreground">{plant.nickname}의 최근 활동 로그</h3>
-              <p className="text-[12px] text-muted-foreground">{plant.nickname}의 성장과정을 한 눈에 보아요</p>
+              <h3 className="text-[15px] font-bold text-foreground">{plant.nickname}를 위한 메모</h3>
+              <p className="text-[13px] text-muted-foreground mt-1">{plant.memo}</p>
             </div>
           </div>
+        )}
 
-          {plant.activityLogs.map((log, logIdx) => (
-            <div key={logIdx} className="mb-3">
-              <button
-                onClick={() => setExpandedLog(expandedLog === logIdx ? -1 : logIdx)}
-                className="flex items-center gap-2 bg-accent rounded-full px-3 py-1.5 mb-2"
-              >
-                {expandedLog === logIdx ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                <span className="text-[13px] font-medium text-foreground">{log.date}</span>
-              </button>
-              {expandedLog === logIdx && (
-                <div className="flex flex-col gap-2 ml-2">
-                  {log.entries.map((entry, entryIdx) => (
-                    <div key={entryIdx} className="flex items-center justify-between">
-                      <span className="text-[13px] text-foreground">
-                        {entry.person} 님이 {entry.action}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground">{entry.time}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+        {/* Bond Level */}
+        <div className="bg-card rounded-[16px] shadow-card p-4 mb-4 flex items-start gap-3">
+          <span className="text-[28px]">💚</span>
+          <div className="flex-1">
+            <h3 className="text-[15px] font-bold text-foreground">친밀도</h3>
+            <div className="mt-2 w-full h-[8px] bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary rounded-full transition-all"
+                style={{ width: `${Math.round(plant.bond_level * 100)}%` }}
+              />
             </div>
-          ))}
+            <p className="text-[12px] text-muted-foreground mt-1">
+              {plant.bond_level < 0.2
+                ? "낯가림"
+                : plant.bond_level < 0.5
+                ? "조금 친해짐"
+                : plant.bond_level < 0.8
+                ? "많이 친해짐"
+                : "아주 가까움"}{" "}
+              ({Math.round(plant.bond_level * 100)}%)
+            </p>
+          </div>
         </div>
 
         {/* Chat with plant */}
         <button
           onClick={() => navigate(`/chat/${plant.id}`)}
-          className="w-full bg-primary text-primary-foreground rounded-[14px] h-[48px] text-[15px] font-semibold mt-4 mb-4"
+          className="w-full bg-primary text-primary-foreground rounded-[14px] h-[48px] text-[15px] font-semibold mt-2 mb-4"
         >
           {plant.nickname}와 대화하기
         </button>

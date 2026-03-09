@@ -14,6 +14,164 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          emoji: string | null
+          id: string
+          plant_id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          plant_id: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          plant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "user_plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          diagnosis_result: Json | null
+          id: string
+          message_type: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          diagnosis_result?: Json | null
+          id?: string
+          message_type?: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          diagnosis_result?: Json | null
+          id?: string
+          message_type?: string
+          role?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_sessions: {
+        Row: {
+          bond_level: number
+          created_at: string
+          id: string
+          inner_state: Json
+          plant_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bond_level?: number
+          created_at?: string
+          id?: string
+          inner_state?: Json
+          plant_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bond_level?: number
+          created_at?: string
+          id?: string
+          inner_state?: Json
+          plant_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_sessions_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "user_plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diagnosis_records: {
+        Row: {
+          cause: string
+          created_at: string
+          detail: string | null
+          id: string
+          plant_id: string
+          problem: string
+          severity: number
+          solution: string
+          user_id: string
+        }
+        Insert: {
+          cause: string
+          created_at?: string
+          detail?: string | null
+          id?: string
+          plant_id: string
+          problem: string
+          severity?: number
+          solution: string
+          user_id: string
+        }
+        Update: {
+          cause?: string
+          created_at?: string
+          detail?: string | null
+          id?: string
+          plant_id?: string
+          problem?: string
+          severity?: number
+          solution?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnosis_records_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "user_plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       family_groups: {
         Row: {
           created_at: string
@@ -97,6 +255,66 @@ export type Database = {
           nickname?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_plants: {
+        Row: {
+          adoption_date: string | null
+          bond_level: number
+          created_at: string
+          health_status: string
+          id: string
+          image_url: string | null
+          last_watered: string | null
+          memo: string | null
+          nickname: string
+          persona: string
+          plant_type: string
+          species: string
+          speech_style: string
+          updated_at: string
+          user_id: string
+          watering_cycle: number
+          watering_unit: string
+        }
+        Insert: {
+          adoption_date?: string | null
+          bond_level?: number
+          created_at?: string
+          health_status?: string
+          id?: string
+          image_url?: string | null
+          last_watered?: string | null
+          memo?: string | null
+          nickname: string
+          persona?: string
+          plant_type?: string
+          species?: string
+          speech_style?: string
+          updated_at?: string
+          user_id: string
+          watering_cycle?: number
+          watering_unit?: string
+        }
+        Update: {
+          adoption_date?: string | null
+          bond_level?: number
+          created_at?: string
+          health_status?: string
+          id?: string
+          image_url?: string | null
+          last_watered?: string | null
+          memo?: string | null
+          nickname?: string
+          persona?: string
+          plant_type?: string
+          species?: string
+          speech_style?: string
+          updated_at?: string
+          user_id?: string
+          watering_cycle?: number
+          watering_unit?: string
         }
         Relationships: []
       }

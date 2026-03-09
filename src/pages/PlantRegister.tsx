@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, Calendar, ChevronDown, Edit2 } from "lucide-react";
-import { plantsData } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreatePlant, useUpdatePlant, usePlant } from "@/hooks/usePlants";
 
 const unitOptions = ["시간", "일", "주", "개월", "년"];
 
@@ -10,17 +11,30 @@ const PlantRegister = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
-  const existingPlant = isEdit ? plantsData.find((p) => p.id === id) : null;
+  const { user } = useAuth();
+  const { data: existingPlant } = usePlant(isEdit ? id : undefined);
+  const createPlant = useCreatePlant();
+  const updatePlant = useUpdatePlant();
 
   const [nickname, setNickname] = useState(existingPlant?.nickname || "");
   const [species, setSpecies] = useState(existingPlant?.species || "");
-  const [adoptionDate, setAdoptionDate] = useState(existingPlant?.adoptionDate || "");
-  const [cycleNum, setCycleNum] = useState(existingPlant?.wateringCycle?.toString() || "");
-  const [cycleUnit, setCycleUnit] = useState(existingPlant?.wateringUnit || "일");
+  const [adoptionDate, setAdoptionDate] = useState(existingPlant?.adoption_date || "");
+  const [cycleNum, setCycleNum] = useState(existingPlant?.watering_cycle?.toString() || "7");
+  const [cycleUnit, setCycleUnit] = useState(existingPlant?.watering_unit || "일");
   const [memo, setMemo] = useState(existingPlant?.memo || "");
   const [showUnitDropdown, setShowUnitDropdown] = useState(false);
-  const [showPhotoSheet, setShowPhotoSheet] = useState(false);
-  const [photoPreview] = useState(existingPlant?.image || "");
+
+  // Sync form when existingPlant loads
+  useState(() => {
+    if (existingPlant) {
+      setNickname(existingPlant.nickname);
+      setSpecies(existingPlant.species);
+      setAdoptionDate(existingPlant.adoption_date || "");
+      setCycleNum(existingPlant.watering_cycle.toString());
+      setCycleUnit(existingPlant.watering_unit);
+      setMemo(existingPlant.memo || "");
+    }
+  });
 
   const formatKoreanDate = (dateStr: string) => {
     if (!dateStr) return "";
@@ -29,13 +43,45 @@ const PlantRegister = () => {
     return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${days[d.getDay()]}`;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!user) {
+      toast({ title: "로그인이 필요합니다", variant: "destructive" });
+      navigate("/login");
+      return;
+    }
     if (!nickname.trim()) {
       toast({ title: "식물 별명을 입력해주세요", variant: "destructive" });
       return;
     }
-    toast({ title: isEdit ? "수정이 완료되었습니다" : "등록이 완료되었습니다" });
-    navigate(isEdit ? `/plant/${id}` : "/my-plants");
+
+    try {
+      if (isEdit && id) {
+        await updatePlant.mutateAsync({
+          id,
+          nickname: nickname.trim(),
+          species: species.trim(),
+          adoption_date: adoptionDate || null,
+          watering_cycle: parseInt(cycleNum) || 7,
+          watering_unit: cycleUnit,
+          memo: memo.trim(),
+        });
+        toast({ title: "수정이 완료되었습니다" });
+        navigate(`/plant/${id}`);
+      } else {
+        const data = await createPlant.mutateAsync({
+          nickname: nickname.trim(),
+          species: species.trim(),
+          adoption_date: adoptionDate || undefined,
+          watering_cycle: parseInt(cycleNum) || 7,
+          watering_unit: cycleUnit,
+          memo: memo.trim(),
+        });
+        toast({ title: "등록이 완료되었습니다! 🌱" });
+        navigate(`/plant/${data.id}`);
+      }
+    } catch (e: any) {
+      toast({ title: "저장 실패", description: e.message, variant: "destructive" });
+    }
   };
 
   return (
@@ -51,25 +97,10 @@ const PlantRegister = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 pb-32">
-        {/* Photo */}
+        {/* Photo placeholder */}
         <div className="flex justify-center pt-4 pb-6">
-          <div className="relative">
-            <div
-              onClick={() => setShowPhotoSheet(true)}
-              className="w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center overflow-hidden cursor-pointer"
-            >
-              {photoPreview ? (
-                <img src={photoPreview} alt="" className="w-[120px] h-[120px] object-contain" />
-              ) : (
-                <div className="w-full h-full bg-muted" />
-              )}
-            </div>
-            <button
-              onClick={() => setShowPhotoSheet(true)}
-              className="absolute bottom-1 right-1 w-[34px] h-[34px] rounded-full bg-card border border-border flex items-center justify-center shadow-sm"
-            >
-              <Edit2 size={16} className="text-muted-foreground" />
-            </button>
+          <div className="w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center">
+            <span className="text-[64px]">🌱</span>
           </div>
         </div>
 
@@ -144,10 +175,7 @@ const PlantRegister = () => {
                   {unitOptions.map((unit) => (
                     <button
                       key={unit}
-                      onClick={() => {
-                        setCycleUnit(unit);
-                        setShowUnitDropdown(false);
-                      }}
+                      onClick={() => { setCycleUnit(unit); setShowUnitDropdown(false); }}
                       className="w-full px-4 py-2.5 text-left text-[14px] text-foreground hover:bg-accent first:rounded-t-[12px] last:rounded-b-[12px]"
                     >
                       {unit}
@@ -178,46 +206,12 @@ const PlantRegister = () => {
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] px-5 pb-8 pt-3 bg-background">
         <button
           onClick={handleSave}
-          className="w-full h-[52px] bg-primary text-primary-foreground rounded-[14px] text-[16px] font-semibold"
+          disabled={createPlant.isPending || updatePlant.isPending}
+          className="w-full h-[52px] bg-primary text-primary-foreground rounded-[14px] text-[16px] font-semibold disabled:opacity-50"
         >
-          {isEdit ? "수정하기" : "등록하기"}
+          {createPlant.isPending || updatePlant.isPending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
         </button>
       </div>
-
-      {/* Photo Action Sheet */}
-      {showPhotoSheet && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <div className="absolute inset-0 bg-foreground/30" onClick={() => setShowPhotoSheet(false)} />
-          <div className="relative w-full max-w-[393px] pb-6 px-3">
-            <div className="bg-card rounded-[14px] overflow-hidden mb-2">
-              <button
-                onClick={() => { toast({ title: "사진 업로드 (mock)" }); setShowPhotoSheet(false); }}
-                className="w-full py-4 text-[16px] text-foreground border-b border-border"
-              >
-                사진 업로드
-              </button>
-              <button
-                onClick={() => { toast({ title: "사진 촬영 (mock)" }); setShowPhotoSheet(false); }}
-                className="w-full py-4 text-[16px] text-primary border-b border-border"
-              >
-                사진 촬영
-              </button>
-              <button
-                onClick={() => { toast({ title: "앨범에서 선택 (mock)" }); setShowPhotoSheet(false); }}
-                className="w-full py-4 text-[16px] text-primary"
-              >
-                앨범에서 선택
-              </button>
-            </div>
-            <button
-              onClick={() => setShowPhotoSheet(false)}
-              className="w-full py-4 bg-card rounded-[14px] text-[16px] font-semibold text-primary"
-            >
-              취소
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
