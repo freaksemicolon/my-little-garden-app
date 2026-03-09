@@ -21,41 +21,41 @@ import ProfileEdit from "./pages/ProfileEdit";
 import NotificationSettings from "./pages/NotificationSettings";
 import FamilyLink from "./pages/FamilyLink";
 import NotFound from "./pages/NotFound";
-import { UserProvider } from "./contexts/UserContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <UserProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Splash />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/plant-register" element={<PlantRegister />} />
-          <Route path="/my-plants" element={<MyPlants />} />
-          <Route path="/plant/:id" element={<PlantDetail />} />
-          <Route path="/plant/:id/edit" element={<PlantRegister />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/:plantId" element={<Chat />} />
-          <Route path="/plant-recommendation" element={<PlantRecommendation />} />
-          <Route path="/diagnosis-history" element={<DiagnosisHistory />} />
-          <Route path="/gardening-level" element={<GardeningLevel />} />
-          <Route path="/zero-waste" element={<ZeroWasteGuide />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/profile-edit" element={<ProfileEdit />} />
-          <Route path="/notification-settings" element={<NotificationSettings />} />
-          <Route path="/family-link" element={<FamilyLink />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-      </UserProvider>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Splash />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/plant-register" element={<PlantRegister />} />
+            <Route path="/my-plants" element={<MyPlants />} />
+            <Route path="/plant/:id" element={<PlantDetail />} />
+            <Route path="/plant/:id/edit" element={<PlantRegister />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/:plantId" element={<Chat />} />
+            <Route path="/plant-recommendation" element={<PlantRecommendation />} />
+            <Route path="/diagnosis-history" element={<DiagnosisHistory />} />
+            <Route path="/gardening-level" element={<GardeningLevel />} />
+            <Route path="/zero-waste" element={<ZeroWasteGuide />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/profile-edit" element={<ProfileEdit />} />
+            <Route path="/notification-settings" element={<NotificationSettings />} />
+            <Route path="/family-link" element={<FamilyLink />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
