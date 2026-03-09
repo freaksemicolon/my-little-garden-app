@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 60 30% 98%;
     --foreground: 0 0% 13%;
 
     --card: 0 0% 100%;
@@ -18,31 +18,33 @@
     --primary: 142 52% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 142 30% 95%;
+    --secondary: 80 30% 92%;
     --secondary-foreground: 142 52% 30%;
 
-    --muted: 0 0% 96%;
+    --muted: 60 20% 96%;
     --muted-foreground: 0 0% 55%;
 
-    --accent: 142 30% 92%;
+    --accent: 80 30% 90%;
     --accent-foreground: 142 52% 30%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --input: 60 20% 93%;
     --ring: 142 52% 45%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
     --garden-green: 142 52% 45%;
-    --garden-green-light: 142 40% 92%;
+    --garden-green-light: 80 30% 92%;
     --garden-green-dark: 142 52% 30%;
     --garden-brown: 25 40% 45%;
-    --garden-beige: 35 30% 96%;
-    --garden-yellow: 45 90% 55%;
+    --garden-beige: 55 40% 95%;
+    --garden-beige-dark: 55 30% 90%;
+    --garden-yellow: 60 80% 70%;
+    --garden-yellow-light: 60 60% 90%;
     --garden-orange: 25 85% 55%;
     --garden-blue: 210 70% 55%;
     --garden-red: 0 70% 55%;
@@ -83,6 +85,11 @@
   @apply w-full max-w-[393px] mx-auto min-h-screen relative;
 }
 
+/* Beige gradient background matching Figma */
+.bg-beige-gradient {
+  background: linear-gradient(180deg, hsl(55 40% 93%) 0%, hsl(60 30% 98%) 40%, hsl(0 0% 100%) 100%);
+}
+
 /* Status indicator colors */
 .status-good {
   color: hsl(var(--garden-green));
@@ -92,4 +99,12 @@
 }
 .status-danger {
   color: hsl(var(--garden-red));
+}
+
+/* Chat bubble colors */
+.chat-bubble-plant {
+  background-color: hsl(60 60% 90%);
+}
+.chat-bubble-user {
+  background-color: hsl(0 0% 92%);
 }
