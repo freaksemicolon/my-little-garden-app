@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,17 +12,17 @@ const Login = () => {
     navigate("/home");
   };
 
+  const handleSocialLogin = () => {
+    toast({ title: "소셜 로그인은 준비 중입니다" });
+  };
+
   return (
     <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient">
       <div className="flex-1 flex flex-col justify-center px-6">
-        {/* MyLittleGarden text logo */}
+        {/* Logo */}
         <div className="mb-10">
-          <h1 className="text-[32px] font-bold tracking-tight">
-            <span className="text-primary">My</span>
-            <span className="text-primary">Little</span>
-            <span className="text-primary">Ga</span>
-            <span className="text-primary">r</span>
-            <span className="text-primary">den</span>
+          <h1 className="text-[32px] font-bold tracking-tight text-primary">
+            MyLittleGarden
           </h1>
         </div>
 
@@ -57,28 +58,24 @@ const Login = () => {
           <div className="flex-1 h-px bg-foreground/20" />
         </div>
 
-        {/* Social Login Icons */}
+        {/* Social Login */}
         <div className="flex justify-center gap-5">
-          {/* 카카오 */}
-          <button className="w-[56px] h-[56px] rounded-full bg-[hsl(50,100%,55%)] flex items-center justify-center shadow-sm">
+          <button onClick={handleSocialLogin} className="w-[56px] h-[56px] rounded-full bg-[hsl(50,100%,55%)] flex items-center justify-center shadow-sm">
             <span className="text-[16px] font-bold text-[hsl(25,30%,20%)]">TALK</span>
           </button>
-          {/* 네이버 */}
-          <button className="w-[56px] h-[56px] rounded-full bg-[hsl(145,63%,42%)] flex items-center justify-center shadow-sm">
+          <button onClick={handleSocialLogin} className="w-[56px] h-[56px] rounded-full bg-[hsl(145,63%,42%)] flex items-center justify-center shadow-sm">
             <span className="text-[22px] font-bold text-primary-foreground">N</span>
           </button>
-          {/* 애플 */}
-          <button className="w-[56px] h-[56px] rounded-full bg-[hsl(220,10%,20%)] flex items-center justify-center shadow-sm">
+          <button onClick={handleSocialLogin} className="w-[56px] h-[56px] rounded-full bg-[hsl(220,10%,20%)] flex items-center justify-center shadow-sm">
             <span className="text-[22px] text-primary-foreground">🍎</span>
           </button>
-          {/* 구글 */}
-          <button className="w-[56px] h-[56px] rounded-full bg-card flex items-center justify-center border border-border shadow-sm">
+          <button onClick={handleSocialLogin} className="w-[56px] h-[56px] rounded-full bg-card flex items-center justify-center border border-border shadow-sm">
             <span className="text-[22px] font-bold">G</span>
           </button>
         </div>
       </div>
 
-      {/* Signup link at bottom */}
+      {/* Signup link */}
       <div className="flex justify-center pb-12 gap-2">
         <span className="text-[14px] text-foreground">아직 회원이 아니신가요?</span>
         <button onClick={() => navigate("/signup")} className="text-[14px] font-semibold text-foreground underline">
