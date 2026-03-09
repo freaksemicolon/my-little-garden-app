@@ -31,7 +31,10 @@ const FamilyLink = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchFamilyData = async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     // Find user's family group
     const { data: memberData } = await supabase
