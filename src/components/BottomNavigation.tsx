@@ -34,7 +34,8 @@ const BottomNavigation = () => {
           className="flex flex-col items-center justify-center -mt-6"
         >
           <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center shadow-lg ${
-            isActive("/home") ? "bg-primary" : "bg-primary"
+            isActive("/my-plants") ? "bg-primary" : "bg-primary"
+          }`}>
           }`}>
             <Home size={26} className="text-primary-foreground" />
           </div>
