@@ -1,12 +1,51 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, ChevronDown } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { plantsData, getWateringStatus } from "@/data/mockData";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const sortOptions = [
+  { value: "name", label: "이름순" },
+  { value: "recent", label: "최근 등록순" },
+  { value: "watering", label: "물주기 급한순" },
+  { value: "health", label: "건강 상태순" },
+];
+
+const healthOrder: Record<string, number> = { "주의": 0, "보통": 1, "좋음": 2 };
 
 const MyPlants = () => {
   const navigate = useNavigate();
-  const [sortBy, setSortBy] = useState("이름순");
+  const [sortBy, setSortBy] = useState("name");
+
+  const sortedPlants = useMemo(() => {
+    const plants = [...plantsData];
+    switch (sortBy) {
+      case "name":
+        return plants.sort((a, b) => a.nickname.localeCompare(b.nickname, "ko"));
+      case "recent":
+        return plants.sort((a, b) => new Date(b.adoptionDate).getTime() - new Date(a.adoptionDate).getTime());
+      case "watering": {
+        return plants.sort((a, b) => {
+          const daysA = Math.floor((Date.now() - new Date(a.lastWatered).getTime()) / 86400000) - a.wateringCycle;
+          const daysB = Math.floor((Date.now() - new Date(b.lastWatered).getTime()) / 86400000) - b.wateringCycle;
+          return daysB - daysA; // most overdue first
+        });
+      }
+      case "health":
+        return plants.sort((a, b) => (healthOrder[a.healthStatus] ?? 1) - (healthOrder[b.healthStatus] ?? 1));
+      default:
+        return plants;
+    }
+  }, [sortBy]);
+
+  const sortLabel = sortOptions.find((o) => o.value === sortBy)?.label ?? "이름순";
 
   return (
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
@@ -28,15 +67,23 @@ const MyPlants = () => {
 
       {/* Sort dropdown */}
       <div className="px-5 pb-2 flex justify-end">
-        <button className="flex items-center gap-1 text-[12px] text-muted-foreground">
-          {sortBy}
-          <ChevronDown size={14} />
-        </button>
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="w-auto h-auto border-none shadow-none bg-transparent p-0 gap-1 text-[12px] text-muted-foreground focus:ring-0">
+            <SelectValue>{sortLabel}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {sortOptions.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value} className="text-[13px]">
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="px-5 flex-1 overflow-y-auto">
         <div className="flex flex-col gap-3">
-          {plantsData.map((plant) => {
+          {sortedPlants.map((plant) => {
             const { status, badge } = getWateringStatus(plant);
             return (
               <button
