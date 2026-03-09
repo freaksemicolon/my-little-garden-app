@@ -30,7 +30,7 @@ const BottomNavigation = () => {
 
         {/* 홈 - Center green circle button */}
         <button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/my-plants")}
           className="flex flex-col items-center justify-center -mt-6"
         >
           <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center shadow-lg ${
