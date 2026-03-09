@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Calendar, ChevronDown, Edit2 } from "lucide-react";
+import { ChevronLeft, Calendar, ChevronDown, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreatePlant, useUpdatePlant, usePlant } from "@/hooks/usePlants";
+import { supabase } from "@/integrations/supabase/client";
 
 const unitOptions = ["시간", "일", "주", "개월", "년"];
 
