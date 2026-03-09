@@ -224,8 +224,7 @@ export interface Quest {
 
 export const dailyQuests: Quest[] = [
   { id: "q1", title: "몬몬이 물주기", exp: 100, completed: false },
-  { id: "q2", title: "다육이 물주기", exp: 100, completed: false },
-  { id: "q3", title: "선인장 상태 확인", exp: 50, completed: true },
+  { id: "q2", title: "사니 물주기", exp: 100, completed: false },
 ];
 
 // ============ Recommended Plants ============

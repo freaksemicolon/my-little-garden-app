@@ -19,6 +19,7 @@ import ZeroWasteGuide from "./pages/ZeroWasteGuide";
 import MyPage from "./pages/MyPage";
 import ProfileEdit from "./pages/ProfileEdit";
 import NotificationSettings from "./pages/NotificationSettings";
+import FamilyLink from "./pages/FamilyLink";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/profile-edit" element={<ProfileEdit />} />
           <Route path="/notification-settings" element={<NotificationSettings />} />
+          <Route path="/family-link" element={<FamilyLink />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
