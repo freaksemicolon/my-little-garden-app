@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Calendar, ChevronDown, Edit2 } from "lucide-react";
+import { ChevronLeft, Calendar, ChevronDown, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreatePlant, useUpdatePlant, usePlant } from "@/hooks/usePlants";
+import { supabase } from "@/integrations/supabase/client";
 
 const unitOptions = ["시간", "일", "주", "개월", "년"];
 
@@ -23,6 +24,10 @@ const PlantRegister = () => {
   const [cycleUnit, setCycleUnit] = useState(existingPlant?.watering_unit || "일");
   const [memo, setMemo] = useState(existingPlant?.memo || "");
   const [showUnitDropdown, setShowUnitDropdown] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(existingPlant?.image_url || null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Sync form when existingPlant loads
   useState(() => {
@@ -33,8 +38,32 @@ const PlantRegister = () => {
       setCycleNum(existingPlant.watering_cycle.toString());
       setCycleUnit(existingPlant.watering_unit);
       setMemo(existingPlant.memo || "");
+      if (existingPlant.image_url) setImagePreview(existingPlant.image_url);
     }
   });
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: "5MB 이하의 이미지만 업로드 가능합니다", variant: "destructive" });
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const uploadImage = async (): Promise<string | null> => {
+    if (!imageFile || !user) return existingPlant?.image_url || null;
+    const ext = imageFile.name.split(".").pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    setUploading(true);
+    const { error } = await supabase.storage.from("plant-images").upload(path, imageFile);
+    setUploading(false);
+    if (error) throw error;
+    const { data } = supabase.storage.from("plant-images").getPublicUrl(path);
+    return data.publicUrl;
+  };
 
   const formatKoreanDate = (dateStr: string) => {
     if (!dateStr) return "";
@@ -55,6 +84,8 @@ const PlantRegister = () => {
     }
 
     try {
+      const imageUrl = await uploadImage();
+
       if (isEdit && id) {
         await updatePlant.mutateAsync({
           id,
@@ -64,6 +95,7 @@ const PlantRegister = () => {
           watering_cycle: parseInt(cycleNum) || 7,
           watering_unit: cycleUnit,
           memo: memo.trim(),
+          ...(imageUrl !== undefined && { image_url: imageUrl }),
         });
         toast({ title: "수정이 완료되었습니다" });
         navigate(`/plant/${id}`);
@@ -75,6 +107,7 @@ const PlantRegister = () => {
           watering_cycle: parseInt(cycleNum) || 7,
           watering_unit: cycleUnit,
           memo: memo.trim(),
+          image_url: imageUrl || undefined,
         });
         toast({ title: "등록이 완료되었습니다! 🌱" });
         navigate(`/plant/${data.id}`);
@@ -99,9 +132,27 @@ const PlantRegister = () => {
       <div className="flex-1 overflow-y-auto px-5 pb-32">
         {/* Photo placeholder */}
         <div className="flex justify-center pt-4 pb-6">
-          <div className="w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center">
-            <span className="text-[64px]">🌱</span>
-          </div>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="relative w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center overflow-hidden group"
+          >
+            {imagePreview ? (
+              <img src={imagePreview} alt="식물 사진" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-[64px]">🌱</span>
+            )}
+            <div className="absolute inset-0 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+              <Camera size={28} className="text-background" />
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+          </button>
         </div>
 
         {/* Nickname */}
@@ -206,10 +257,10 @@ const PlantRegister = () => {
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] px-5 pb-8 pt-3 bg-background">
         <button
           onClick={handleSave}
-          disabled={createPlant.isPending || updatePlant.isPending}
+          disabled={createPlant.isPending || updatePlant.isPending || uploading}
           className="w-full h-[52px] bg-primary text-primary-foreground rounded-[14px] text-[16px] font-semibold disabled:opacity-50"
         >
-          {createPlant.isPending || updatePlant.isPending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
+          {uploading ? "사진 업로드 중..." : createPlant.isPending || updatePlant.isPending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
         </button>
       </div>
     </div>
