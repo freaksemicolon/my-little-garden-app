@@ -1,73 +1,82 @@
 import { useNavigate } from "react-router-dom";
-import { Plus, Camera } from "lucide-react";
+import { Bell } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
-import PlantCard from "@/components/PlantCard";
-import NotificationCard from "@/components/NotificationCard";
-import { samplePlants, getNextWaterDate, getWateringStatus } from "@/data/plants";
+import { samplePlants } from "@/data/plants";
+import plantSucculent from "@/assets/plant-succulent.png";
+
+const tags = [
+  { label: "#초보식집사_추천", active: true },
+  { label: "#햇빛이_부족한_방", active: false },
+  { label: "#반려동물_안전", active: false },
+  { label: "#물주기_깜빡해도_거뜬", active: false },
+  { label: "#프로 식물킬러_졸업", active: false },
+  { label: "#알레르기", active: false },
+];
+
+const recommendedPlants = [
+  { name: "스킨답서스", nameEn: "Pothos", image: plantSucculent },
+  { name: "산세베리아", nameEn: "Snake Plant", image: plantSucculent },
+  { name: "테이블 야자", nameEn: "Parlor Palm", image: plantSucculent },
+];
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const todayPlants = samplePlants.filter((p) => {
-    const next = getNextWaterDate(p.lastWatered, p.wateringCycle);
-    const status = getWateringStatus(next);
-    return status === "오늘 물주기" || status === "지연";
-  });
-
   return (
-    <div className="mobile-container flex flex-col min-h-screen bg-background pb-[80px]">
+    <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
       {/* Header */}
-      <div className="px-5 pt-14 pb-4">
-        <h1 className="text-[22px] font-bold text-foreground">안녕하세요, 리나님 👋</h1>
-        <p className="text-[14px] text-muted-foreground mt-1">오늘도 식물을 잘 돌봐주세요</p>
+      <div className="flex items-center justify-between px-5 pt-14 pb-2">
+        <h1 className="text-[20px] font-bold text-primary tracking-tight">
+          MyLittleGarden
+        </h1>
+        <button className="p-2">
+          <Bell size={22} className="text-foreground" />
+        </button>
       </div>
 
-      {/* Notification */}
-      {todayPlants.length > 0 && (
-        <div className="px-5 mb-4">
-          {todayPlants.map((p) => (
-            <NotificationCard
-              key={p.id}
-              plantName={p.name}
-              message={`${p.name} 물 줄 시간입니다`}
-              image={p.image}
-            />
+      <div className="flex-1 px-5 overflow-y-auto">
+        {/* 식물 추천 */}
+        <h2 className="text-[20px] font-bold text-foreground mb-3">식물 추천</h2>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {tags.map((tag) => (
+            <button
+              key={tag.label}
+              className={`px-3 py-1.5 rounded-full text-[12px] font-medium ${
+                tag.active
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-accent text-foreground"
+              }`}
+            >
+              {tag.label}
+            </button>
           ))}
         </div>
-      )}
 
-      {/* Today's Plants */}
-      <div className="px-5 mb-6">
-        <h2 className="text-[16px] font-semibold text-foreground mb-3">오늘의 식물</h2>
-        <div className="flex flex-col gap-3">
-          {samplePlants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} />
+        {/* Scrollbar indicator */}
+        <div className="w-1/3 h-[3px] bg-border rounded-full mb-6" />
+
+        {/* 검색 결과 */}
+        <h2 className="text-[20px] font-bold text-foreground mb-4">검색 결과</h2>
+
+        {/* Plant cards grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {recommendedPlants.map((plant) => (
+            <button
+              key={plant.name}
+              onClick={() => navigate("/plant/1")}
+              className="bg-card rounded-[16px] shadow-card overflow-hidden text-left"
+            >
+              <div className="w-full aspect-square bg-accent flex items-center justify-center p-4">
+                <img src={plant.image} alt={plant.name} className="w-full h-full object-contain" />
+              </div>
+              <div className="p-3">
+                <h3 className="text-[15px] font-semibold text-foreground">{plant.name}</h3>
+                <p className="text-[12px] text-muted-foreground">{plant.nameEn}</p>
+              </div>
+            </button>
           ))}
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="px-5 mb-6">
-        <h2 className="text-[16px] font-semibold text-foreground mb-3">빠른 기능</h2>
-        <div className="flex gap-3">
-          <button
-            onClick={() => navigate("/plant-register")}
-            className="flex-1 bg-card rounded-[16px] shadow-card p-4 flex flex-col items-center gap-2"
-          >
-            <div className="w-[44px] h-[44px] rounded-full bg-secondary flex items-center justify-center">
-              <Plus size={20} className="text-primary" />
-            </div>
-            <span className="text-[13px] font-medium text-foreground">내 식물 등록</span>
-          </button>
-          <button
-            onClick={() => navigate("/chat")}
-            className="flex-1 bg-card rounded-[16px] shadow-card p-4 flex flex-col items-center gap-2"
-          >
-            <div className="w-[44px] h-[44px] rounded-full bg-secondary flex items-center justify-center">
-              <Camera size={20} className="text-primary" />
-            </div>
-            <span className="text-[13px] font-medium text-foreground">이미지로 식물 진단</span>
-          </button>
         </div>
       </div>
 
