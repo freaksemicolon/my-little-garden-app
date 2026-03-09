@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Bell } from "lucide-react";
 import { defaultNotificationSettings, type NotificationSetting } from "@/data/mockData";
 import BottomNavigation from "@/components/BottomNavigation";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { toast } from "sonner";
 
 const settingsMeta: Record<string, { emoji: string; group?: string; extra?: string }> = {
   push: { emoji: "🔔" },
@@ -29,6 +31,7 @@ const Toggle = ({ enabled, onToggle }: { enabled: boolean; onToggle: () => void 
 
 const NotificationSettings = () => {
   const navigate = useNavigate();
+  const { isSupported, isSubscribed, permission, subscribe, unsubscribe } = usePushNotifications();
   const [settings, setSettings] = useState<NotificationSetting[]>(() => {
     const saved = localStorage.getItem("notificationSettings");
     return saved ? JSON.parse(saved) : defaultNotificationSettings;
@@ -44,8 +47,23 @@ const NotificationSettings = () => {
     );
   };
 
+  const handlePushToggle = async () => {
+    if (isSubscribed) {
+      const ok = await unsubscribe();
+      if (ok) toast.success("푸시 알림이 해제되었습니다");
+    } else {
+      const ok = await subscribe();
+      if (ok) {
+        toast.success("푸시 알림이 활성화되었습니다! 🌱");
+      } else if (permission === "denied") {
+        toast.error("브라우저 설정에서 알림 권한을 허용해주세요");
+      } else {
+        toast.error("푸시 알림 설정에 실패했습니다");
+      }
+    }
+  };
+
   const getSetting = (key: string) => settings.find((s) => s.key === key)!;
-  const pushSetting = getSetting("push");
   const detailSettings = settings.filter((s) => settingsMeta[s.key]?.group === "detail");
   const marketingSetting = getSetting("marketing");
 
@@ -67,15 +85,37 @@ const NotificationSettings = () => {
       </div>
 
       <div className="px-5 pt-4 flex-1 overflow-y-auto">
-        {/* 푸시 알림 */}
-        <div className="bg-card rounded-[16px] shadow-card px-4 py-4 flex items-center gap-3">
-          <span className="text-[28px]">🔔</span>
-          <span className="text-[16px] font-medium text-foreground flex-1">{pushSetting.label}</span>
-          <Toggle enabled={pushSetting.enabled} onToggle={() => toggleSetting("push")} />
+        {/* 식물 푸시 알림 (Web Push) */}
+        <div className="bg-card rounded-[16px] shadow-card px-4 py-4">
+          <div className="flex items-center gap-3">
+            <span className="text-[28px]">🌱</span>
+            <div className="flex-1">
+              <span className="text-[16px] font-medium text-foreground">식물 알림 (푸시)</span>
+              <p className="text-[12px] text-muted-foreground mt-0.5">
+                {isSubscribed
+                  ? "식물이 보내는 메시지를 푸시 알림으로 받습니다"
+                  : "활성화하면 식물이 먼저 말을 걸어요!"}
+              </p>
+            </div>
+            <Toggle enabled={isSubscribed} onToggle={handlePushToggle} />
+          </div>
+          {!isSupported && (
+            <p className="text-[11px] text-destructive mt-2 ml-[40px]">
+              이 브라우저는 푸시 알림을 지원하지 않습니다
+            </p>
+          )}
+          {permission === "denied" && (
+            <p className="text-[11px] text-destructive mt-2 ml-[40px]">
+              브라우저 설정에서 알림 권한을 허용해주세요
+            </p>
+          )}
         </div>
 
+        {/* 앱 알림 설정 */}
+        <p className="text-[13px] text-muted-foreground mt-4 mb-2 px-1">앱 내 알림</p>
+
         {/* 소리 / 진동 / 방해 금지 */}
-        <div className="bg-card rounded-[16px] shadow-card mt-3 overflow-hidden">
+        <div className="bg-card rounded-[16px] shadow-card overflow-hidden">
           {detailSettings.map((s, i) => {
             const meta = settingsMeta[s.key];
             return (
