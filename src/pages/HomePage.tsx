@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Bell, X } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { currentUser, plantsData } from "@/data/mockData";
+import { useAuth } from "@/contexts/AuthContext";
 
 const notifications = [
   { id: 1, type: "메세지 1건", text: "몬몬이 : 이제 물을 줄 시간이에요!", time: "11:54 AM", unread: true },
