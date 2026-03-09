@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Bell, ChevronRight } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { currentUser, plantsData, familyMembers } from "@/data/mockData";
+import { useUser } from "@/contexts/UserContext";
 
 type Tab = "together" | "farewell" | "settings";
 
