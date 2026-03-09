@@ -17,7 +17,7 @@ const BottomNavigation = () => {
         >
           <LayoutGrid
             size={24}
-            className={isActive("/my-plants") ? "text-primary" : "text-muted-foreground"}
+            className={isActive("/home") ? "text-primary" : "text-muted-foreground"}
           />
           <span
             className={`text-[11px] font-medium ${
