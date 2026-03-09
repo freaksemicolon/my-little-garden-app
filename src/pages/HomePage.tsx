@@ -1,21 +1,38 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bell, X } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlants, getWateringStatusFromPlant } from "@/hooks/usePlants";
-import plantSucculent from "@/assets/plant-succulent.png";
+import { supabase } from "@/integrations/supabase/client";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { user, profile } = useAuth();
   const { data: plants = [], isLoading } = usePlants();
   const displayName = profile?.nickname || "사용자";
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [proactiveMessages, setProactiveMessages] = useState<any[]>([]);
   const touchStartX = useRef(0);
 
   const hasPlants = plants.length > 0;
+
+  useEffect(() => {
+    if (!user) return;
+    const loadNotifications = async () => {
+      const { data } = await supabase
+        .from("chat_messages")
+        .select("content, created_at, session_id, message_type")
+        .eq("user_id", user.id)
+        .eq("role", "plant")
+        .neq("message_type", "text")
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (data) setProactiveMessages(data);
+    };
+    loadNotifications();
+  }, [user]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -34,6 +51,24 @@ const HomePage = () => {
     ? Math.floor((Date.now() - new Date(plant.adoption_date).getTime()) / 86400000)
     : 0;
 
+  const unreadCount = proactiveMessages.length;
+
+  const formatTime = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diff = now.getTime() - d.getTime();
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}분 전`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}시간 전`;
+    return `${Math.floor(diff / 86400000)}일 전`;
+  };
+
+  const getTypeEmoji = (type: string) => {
+    if (type === "watering_reminder") return "💧";
+    if (type === "miss_you") return "💚";
+    if (type === "morning_greeting") return "🌅";
+    return "🌱";
+  };
+
   return (
     <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient pb-[90px]">
       {/* Header */}
@@ -41,19 +76,42 @@ const HomePage = () => {
         <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 relative">
           <Bell size={22} className="text-foreground" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 w-[16px] h-[16px] rounded-full bg-destructive text-[10px] text-destructive-foreground flex items-center justify-center font-bold">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
         </button>
       </div>
 
       {/* Notification Dropdown */}
       {showNotifications && (
-        <div className="mx-5 mb-4 bg-card rounded-[16px] shadow-card p-4 relative z-10">
+        <div className="mx-5 mb-4 bg-card rounded-[16px] shadow-card p-4 relative z-10 max-h-[300px] overflow-y-auto">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[16px] font-bold text-foreground">최근 알림</h3>
+            <h3 className="text-[16px] font-bold text-foreground">식물 알림</h3>
             <button onClick={() => setShowNotifications(false)}>
               <X size={20} className="text-muted-foreground" />
             </button>
           </div>
-          <p className="text-[13px] text-muted-foreground py-4 text-center">알림이 없습니다</p>
+          {proactiveMessages.length === 0 ? (
+            <p className="text-[13px] text-muted-foreground py-4 text-center">알림이 없습니다</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {proactiveMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-2 p-2 rounded-[10px] bg-muted/50 cursor-pointer hover:bg-muted"
+                  onClick={() => setShowNotifications(false)}
+                >
+                  <span className="text-[18px] mt-0.5">{getTypeEmoji(msg.message_type)}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] text-foreground line-clamp-2">{msg.content}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{formatTime(msg.created_at)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -149,7 +207,6 @@ const HomePage = () => {
               </div>
             )}
 
-            {/* 나의 식물 Button */}
             <div className="flex justify-center mt-4">
               <button
                 onClick={() => navigate("/my-plants")}
