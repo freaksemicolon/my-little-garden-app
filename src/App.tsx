@@ -12,7 +12,10 @@ import PlantRegister from "./pages/PlantRegister";
 import MyPlants from "./pages/MyPlants";
 import PlantDetail from "./pages/PlantDetail";
 import Chat from "./pages/Chat";
-import ServicePage from "./pages/ServicePage";
+import PlantRecommendation from "./pages/PlantRecommendation";
+import DiagnosisHistory from "./pages/DiagnosisHistory";
+import GardeningLevel from "./pages/GardeningLevel";
+import ZeroWasteGuide from "./pages/ZeroWasteGuide";
 import MyPage from "./pages/MyPage";
 import ProfileEdit from "./pages/ProfileEdit";
 import NotificationSettings from "./pages/NotificationSettings";
@@ -35,8 +38,13 @@ const App = () => (
           <Route path="/plant-register" element={<PlantRegister />} />
           <Route path="/my-plants" element={<MyPlants />} />
           <Route path="/plant/:id" element={<PlantDetail />} />
+          <Route path="/plant/:id/edit" element={<PlantRegister />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/service" element={<ServicePage />} />
+          <Route path="/chat/:plantId" element={<Chat />} />
+          <Route path="/plant-recommendation" element={<PlantRecommendation />} />
+          <Route path="/diagnosis-history" element={<DiagnosisHistory />} />
+          <Route path="/gardening-level" element={<GardeningLevel />} />
+          <Route path="/zero-waste" element={<ZeroWasteGuide />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/profile-edit" element={<ProfileEdit />} />
           <Route path="/notification-settings" element={<NotificationSettings />} />
