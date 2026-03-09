@@ -12,7 +12,7 @@ const BottomNavigation = () => {
       <div className="flex items-end justify-around h-[80px] pb-4">
         {/* 전체 케어 */}
         <button
-          onClick={() => navigate("/my-plants")}
+          onClick={() => navigate("/home")}
           className="flex flex-col items-center justify-center gap-1 flex-1"
         >
           <LayoutGrid
