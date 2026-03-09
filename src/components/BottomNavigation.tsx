@@ -12,16 +12,16 @@ const BottomNavigation = () => {
       <div className="flex items-end justify-around h-[80px] pb-4">
         {/* 전체 케어 */}
         <button
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/my-plants")}
           className="flex flex-col items-center justify-center gap-1 flex-1"
         >
           <LayoutGrid
             size={24}
-            className={isActive("/home") ? "text-primary" : "text-muted-foreground"}
+            className={isActive("/my-plants") ? "text-primary" : "text-muted-foreground"}
           />
           <span
             className={`text-[11px] font-medium ${
-              isActive("/home") ? "text-primary" : "text-muted-foreground"
+              isActive("/my-plants") ? "text-primary" : "text-muted-foreground"
             }`}
           >
             전체 케어
@@ -30,7 +30,7 @@ const BottomNavigation = () => {
 
         {/* 홈 - Center green circle button */}
         <button
-          onClick={() => navigate("/my-plants")}
+          onClick={() => navigate("/home")}
           className="flex flex-col items-center justify-center -mt-6"
         >
           <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center shadow-lg bg-primary`}>
