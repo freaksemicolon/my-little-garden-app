@@ -33,10 +33,7 @@ const BottomNavigation = () => {
           onClick={() => navigate("/my-plants")}
           className="flex flex-col items-center justify-center -mt-6"
         >
-          <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center shadow-lg ${
-            isActive("/my-plants") ? "bg-primary" : "bg-primary"
-          }`}>
-          }`}>
+          <div className={`w-[60px] h-[60px] rounded-full flex items-center justify-center shadow-lg bg-primary`}>
             <Home size={26} className="text-primary-foreground" />
           </div>
           <span className="text-[11px] font-medium text-primary mt-1">홈</span>
