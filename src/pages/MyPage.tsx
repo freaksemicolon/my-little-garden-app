@@ -22,7 +22,7 @@ const MyPage = () => {
       {/* 가족 연동 관리 */}
       <button
         className="w-full bg-card rounded-[16px] shadow-card px-4 py-4 flex items-center gap-3 mt-4"
-        onClick={() => {}}
+        onClick={() => navigate("/family-link")}
       >
         <span className="text-[28px]">👨‍👩‍👧</span>
         <div className="flex-1 text-left">
