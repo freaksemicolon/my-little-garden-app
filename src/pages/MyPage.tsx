@@ -14,6 +14,7 @@ const departedPlants = [
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const { userInfo } = useUser();
   const [activeTab, setActiveTab] = useState<Tab | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
