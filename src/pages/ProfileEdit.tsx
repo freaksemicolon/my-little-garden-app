@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Camera } from "lucide-react";
+import { ChevronLeft, Edit2 } from "lucide-react";
+import plantSucculent from "@/assets/plant-succulent.png";
 
 const ProfileEdit = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("리나");
+  const [name, setName] = useState("나연");
   const [style, setStyle] = useState("초보자");
   const [defaultCycle, setDefaultCycle] = useState("7");
 
@@ -16,20 +17,20 @@ const ProfileEdit = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-background">
       <div className="flex items-center h-[56px] px-4">
         <button onClick={() => navigate(-1)} className="p-2">
-          <ArrowLeft size={22} className="text-foreground" />
+          <ChevronLeft size={24} className="text-foreground" />
         </button>
-        <h1 className="text-[17px] font-semibold text-foreground ml-2">프로필 수정</h1>
+        <h1 className="text-[17px] font-semibold text-foreground ml-1">프로필 수정</h1>
       </div>
 
       <div className="flex-1 px-5 pt-4">
         {/* Avatar */}
         <div className="flex justify-center mb-6">
           <div className="relative">
-            <div className="w-[96px] h-[96px] rounded-full bg-secondary flex items-center justify-center overflow-hidden">
+            <div className="w-[96px] h-[96px] rounded-full bg-accent flex items-center justify-center overflow-hidden">
               <span className="text-[32px]">🌱</span>
             </div>
-            <button className="absolute bottom-0 right-0 w-[30px] h-[30px] rounded-full bg-primary flex items-center justify-center">
-              <Camera size={14} className="text-primary-foreground" />
+            <button className="absolute bottom-0 right-0 w-[30px] h-[30px] rounded-full bg-card border border-border flex items-center justify-center">
+              <Edit2 size={14} className="text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -41,7 +42,7 @@ const ProfileEdit = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-[48px] px-4 rounded-[12px] bg-muted text-[14px] text-foreground outline-none focus:ring-2 focus:ring-ring"
+              className="w-full h-[48px] px-4 rounded-[12px] bg-accent text-[14px] text-foreground outline-none"
             />
           </div>
           <div>
@@ -50,7 +51,7 @@ const ProfileEdit = () => {
               type="text"
               value={style}
               onChange={(e) => setStyle(e.target.value)}
-              className="w-full h-[48px] px-4 rounded-[12px] bg-muted text-[14px] text-foreground outline-none focus:ring-2 focus:ring-ring"
+              className="w-full h-[48px] px-4 rounded-[12px] bg-accent text-[14px] text-foreground outline-none"
             />
           </div>
           <div>
@@ -59,14 +60,14 @@ const ProfileEdit = () => {
               type="number"
               value={defaultCycle}
               onChange={(e) => setDefaultCycle(e.target.value)}
-              className="w-full h-[48px] px-4 rounded-[12px] bg-muted text-[14px] text-foreground outline-none focus:ring-2 focus:ring-ring"
+              className="w-full h-[48px] px-4 rounded-[12px] bg-accent text-[14px] text-foreground outline-none"
             />
           </div>
         </div>
 
         <button
           onClick={handleSave}
-          className="w-full h-[52px] bg-primary text-primary-foreground rounded-[14px] text-[16px] font-semibold mt-8"
+          className="w-full h-[52px] bg-primary text-primary-foreground rounded-[12px] text-[16px] font-semibold mt-8"
         >
           저장하기
         </button>
