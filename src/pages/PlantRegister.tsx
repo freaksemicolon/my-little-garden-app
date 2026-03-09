@@ -132,9 +132,27 @@ const PlantRegister = () => {
       <div className="flex-1 overflow-y-auto px-5 pb-32">
         {/* Photo placeholder */}
         <div className="flex justify-center pt-4 pb-6">
-          <div className="w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center">
-            <span className="text-[64px]">🌱</span>
-          </div>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="relative w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center overflow-hidden group"
+          >
+            {imagePreview ? (
+              <img src={imagePreview} alt="식물 사진" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-[64px]">🌱</span>
+            )}
+            <div className="absolute inset-0 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+              <Camera size={28} className="text-background" />
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+          </button>
         </div>
 
         {/* Nickname */}
