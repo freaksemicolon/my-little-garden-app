@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useUser } from "@/contexts/UserContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { setUserInfo } = useUser();
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +22,7 @@ const Signup = () => {
       toast({ title: "비밀번호가 일치하지 않습니다", variant: "destructive" });
       return;
     }
+    setUserInfo({ nickname, email });
     toast({ title: "회원가입이 완료되었습니다" });
     navigate("/home");
   };

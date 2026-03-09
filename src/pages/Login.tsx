@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useUser } from "@/contexts/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUserInfo } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    const name = email.split("@")[0] || "사용자";
+    setUserInfo({ nickname: name, email });
     navigate("/home");
   };
 
