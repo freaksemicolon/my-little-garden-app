@@ -257,10 +257,10 @@ const PlantRegister = () => {
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] px-5 pb-8 pt-3 bg-background">
         <button
           onClick={handleSave}
-          disabled={createPlant.isPending || updatePlant.isPending}
+          disabled={createPlant.isPending || updatePlant.isPending || uploading}
           className="w-full h-[52px] bg-primary text-primary-foreground rounded-[14px] text-[16px] font-semibold disabled:opacity-50"
         >
-          {createPlant.isPending || updatePlant.isPending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
+          {uploading ? "사진 업로드 중..." : createPlant.isPending || updatePlant.isPending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
         </button>
       </div>
     </div>
