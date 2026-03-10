@@ -4,7 +4,7 @@ import { ChevronLeft, ArrowUp, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlant } from "@/hooks/usePlants";
 import { useChat } from "@/hooks/useChat";
-import plantSucculent from "@/assets/plant-succulent.png";
+import plant3dSucculent from "@/assets/plant-3d-succulent.png";
 
 const Chat = () => {
   const navigate = useNavigate();
