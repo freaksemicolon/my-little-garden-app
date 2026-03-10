@@ -22,6 +22,7 @@ const Login = () => {
     if (error) {
       toast({ title: "로그인 실패", description: error.message, variant: "destructive" });
       return;
+    }
     localStorage.setItem("hasSeenOnboarding", "true");
     navigate("/home");
   };
