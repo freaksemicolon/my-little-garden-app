@@ -6,6 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { usePlants, getWateringStatusFromPlant } from "@/hooks/usePlants";
 import { supabase } from "@/integrations/supabase/client";
 import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
+import iconTree from "@/assets/icon-tree.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -76,7 +78,7 @@ const HomePage = () => {
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
         <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 relative">
-          <Bell size={22} className="text-foreground" />
+          <img src={iconBellActive} alt="알림" className="w-[24px] h-[24px] object-contain" />
           {unreadCount > 0 && (
             <span className="absolute top-1 right-1 w-[16px] h-[16px] rounded-full bg-destructive text-[10px] text-destructive-foreground flex items-center justify-center font-bold">
               {unreadCount > 9 ? "9+" : unreadCount}
@@ -119,7 +121,7 @@ const HomePage = () => {
       <div className="flex-1 px-5 overflow-y-auto">
         {/* Greeting */}
         <div className="flex items-center gap-2 mt-2">
-          <span className="text-[28px]">🌳</span>
+          <img src={iconTree} alt="tree" className="w-[32px] h-[32px] object-contain" />
           <h2 className="text-[20px] font-bold text-primary">
             {`안녕하세요, ${displayName} 님!`}
           </h2>

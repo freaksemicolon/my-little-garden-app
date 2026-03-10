@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { recommendedPlants, recommendTags } from "@/data/mockData";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
 
 const PlantRecommendation = () => {
   const navigate = useNavigate();
@@ -22,9 +23,9 @@ const PlantRecommendation = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
-        <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button onClick={() => navigate("/notification-settings")} className="p-2">
-          <Bell size={22} className="text-foreground" />
+          <img src={iconBellActive} alt="알림" className="w-[24px] h-[24px] object-contain" />
         </button>
       </div>
 
@@ -60,8 +61,8 @@ const PlantRecommendation = () => {
               onClick={() => navigate("/plant-register")}
               className="bg-card rounded-[16px] shadow-card overflow-hidden text-left"
             >
-              <div className="w-full aspect-square bg-accent flex items-center justify-center p-4">
-                <img src={plant.image} alt={plant.name} className="w-full h-full object-contain" />
+              <div className="w-full aspect-square bg-accent flex items-center justify-center p-4 rounded-t-[16px]">
+                <img src={plant.image} alt={plant.name} className="w-full h-full object-contain rounded-[12px]" />
               </div>
               <div className="p-3">
                 <h3 className="text-[15px] font-semibold text-foreground">{plant.name}</h3>

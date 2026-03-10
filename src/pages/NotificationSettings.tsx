@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Bell } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { defaultNotificationSettings, type NotificationSetting } from "@/data/mockData";
 import BottomNavigation from "@/components/BottomNavigation";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { toast } from "sonner";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconBell from "@/assets/icon-bell.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
 
 const settingsMeta: Record<string, { emoji: string; group?: string; extra?: string }> = {
   push: { emoji: "🔔" },
@@ -71,9 +74,9 @@ const NotificationSettings = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
-        <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button className="p-2">
-          <Bell size={22} className="text-foreground" />
+          <img src={iconBell} alt="알림" className="w-[24px] h-[24px] object-contain" />
         </button>
       </div>
 
@@ -88,7 +91,7 @@ const NotificationSettings = () => {
         {/* 식물 푸시 알림 (Web Push) */}
         <div className="bg-card rounded-[16px] shadow-card px-4 py-4">
           <div className="flex items-center gap-3">
-            <span className="text-[28px]">🌱</span>
+            <img src={iconBellActive} alt="알림" className="w-[28px] h-[28px] object-contain" />
             <div className="flex-1">
               <span className="text-[16px] font-medium text-foreground">식물 알림 (푸시)</span>
               <p className="text-[12px] text-muted-foreground mt-0.5">

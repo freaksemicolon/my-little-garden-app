@@ -1,6 +1,8 @@
-import plantMonstera from "@/assets/plant-monstera.png";
-import plantSucculent from "@/assets/plant-succulent.png";
-import plantCactus from "@/assets/plant-cactus.png";
+import plantPothos from "@/assets/plant-pothos.png";
+import plantSansevieria from "@/assets/plant-sansevieria.png";
+import plantSansevieria2 from "@/assets/plant-sansevieria-2.png";
+import plantOlive from "@/assets/plant-olive.png";
+import plant3d from "@/assets/plant-3d-succulent.png";
 
 // ============ User ============
 export interface User {
@@ -76,7 +78,7 @@ export const plantsData: PlantData[] = [
     id: "1",
     nickname: "몬몬이",
     species: "몬스테라",
-    image: plantSucculent,
+    image: plant3d,
     adoptionDate: "2026-01-03",
     wateringCycle: 9,
     wateringUnit: "일",
@@ -106,7 +108,7 @@ export const plantsData: PlantData[] = [
     id: "2",
     nickname: "다육이",
     species: "다육식물",
-    image: plantSucculent,
+    image: plant3d,
     adoptionDate: "2026-02-01",
     wateringCycle: 5,
     wateringUnit: "일",
@@ -126,7 +128,7 @@ export const plantsData: PlantData[] = [
     id: "3",
     nickname: "선인장",
     species: "선인장",
-    image: plantCactus,
+    image: plant3d,
     adoptionDate: "2025-12-25",
     wateringCycle: 14,
     wateringUnit: "일",
@@ -237,10 +239,10 @@ export interface RecommendedPlant {
 }
 
 export const recommendedPlants: RecommendedPlant[] = [
-  { id: "r1", name: "스킨답서스", nameEn: "Pothos", image: plantMonstera, tags: ["#초보식집사_추천", "#물주기_깜빡해도_거뜬"] },
-  { id: "r2", name: "산세베리아", nameEn: "Snake Plant", image: plantCactus, tags: ["#초보식집사_추천", "#햇빛이_부족한_방", "#반려동물_안전"] },
-  { id: "r3", name: "테이블 야자", nameEn: "Parlor Palm", image: plantSucculent, tags: ["#햇빛이_부족한_방", "#반려동물_안전"] },
-  { id: "r4", name: "몬스테라", nameEn: "Monstera", image: plantMonstera, tags: ["#초보식집사_추천", "#프로 식물킬러_졸업"] },
+  { id: "r1", name: "스킨답서스", nameEn: "Pothos", image: plantPothos, tags: ["#초보식집사_추천", "#물주기_깜빡해도_거뜬"] },
+  { id: "r2", name: "산세베리아", nameEn: "Snake Plant", image: plantSansevieria, tags: ["#초보식집사_추천", "#햇빛이_부족한_방", "#반려동물_안전"] },
+  { id: "r3", name: "산세베리아 (화이트)", nameEn: "Snake Plant White", image: plantSansevieria2, tags: ["#햇빛이_부족한_방", "#반려동물_안전"] },
+  { id: "r4", name: "올리브나무", nameEn: "Olive Tree", image: plantOlive, tags: ["#초보식집사_추천", "#프로 식물킬러_졸업"] },
 ];
 
 export const recommendTags = [
