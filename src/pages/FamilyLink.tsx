@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Bell, Share2, Link2, Copy } from "lucide-react";
+import { ChevronLeft, Bell, Share2, Copy } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { currentUser } from "@/data/mockData";
 
 interface FamilyMember {
   user_id: string;
@@ -27,7 +26,6 @@ const FamilyLink = () => {
   const [group, setGroup] = useState<FamilyGroup | null>(null);
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [joinCode, setJoinCode] = useState("");
-  const [showJoinModal, setShowJoinModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchFamilyData = async () => {
@@ -41,7 +39,6 @@ const FamilyLink = () => {
     setLoading(true);
 
     try {
-      // Find user's family group
       const { data: memberData, error: memberError } = await supabase
         .from("family_members")
         .select("group_id")
@@ -58,7 +55,6 @@ const FamilyLink = () => {
 
       const groupId = memberData[0].group_id;
 
-      // Fetch group info
       const { data: groupData, error: groupError } = await supabase
         .from("family_groups")
         .select("*")
@@ -68,7 +64,6 @@ const FamilyLink = () => {
       if (groupError) throw groupError;
       if (groupData) setGroup(groupData);
 
-      // Fetch members with profiles
       const { data: membersData, error: membersError } = await supabase
         .from("family_members")
         .select("user_id, role")
@@ -114,7 +109,7 @@ const FamilyLink = () => {
 
   const createFamily = async () => {
     if (!user) {
-      toast({ title: "로그인이 필요합니다", description: "로그인 후 다시 시도해주세요.", variant: "destructive" });
+      toast({ title: "로그인이 필요합니다", variant: "destructive" });
       navigate("/login");
       return;
     }
@@ -130,7 +125,6 @@ const FamilyLink = () => {
       return;
     }
 
-    // Add self as member (owner)
     const { error: memberInsertError } = await supabase.from("family_members").insert({
       group_id: data.id,
       user_id: user.id,
@@ -148,12 +142,15 @@ const FamilyLink = () => {
 
   const joinFamily = async () => {
     if (!user) {
-      toast({ title: "로그인이 필요합니다", description: "로그인 후 다시 시도해주세요.", variant: "destructive" });
+      toast({ title: "로그인이 필요합니다", variant: "destructive" });
       navigate("/login");
       return;
     }
 
-    if (!joinCode.trim()) return;
+    if (!joinCode.trim()) {
+      toast({ title: "초대 코드를 입력해주세요", variant: "destructive" });
+      return;
+    }
 
     const { error } = await supabase.rpc("join_family_by_code", { p_invite_code: joinCode.trim() });
     if (error) {
@@ -162,7 +159,6 @@ const FamilyLink = () => {
     }
 
     toast({ title: "가족 정원에 참여했습니다! 🎉" });
-    setShowJoinModal(false);
     setJoinCode("");
     fetchFamilyData();
   };
@@ -215,7 +211,6 @@ const FamilyLink = () => {
 
       <div className="flex-1 px-5 pt-4 overflow-y-auto">
         {!group ? (
-          /* No family group yet */
           <div className="flex flex-col items-center gap-6 pt-10">
             <span className="text-[64px]">👨‍👩‍👧‍👦</span>
             <p className="text-[16px] text-foreground text-center font-medium">
@@ -230,12 +225,26 @@ const FamilyLink = () => {
             >
               🌿 가족 정원 만들기
             </button>
-            <button
-              onClick={() => setShowJoinModal(true)}
-              className="w-full h-[52px] border border-border bg-card text-foreground rounded-[14px] text-[16px] font-semibold"
-            >
-              🔗 초대 코드로 참여하기
-            </button>
+
+            {/* Inline join code input */}
+            <div className="w-full">
+              <p className="text-[14px] font-semibold text-foreground mb-2">초대 코드로 참여하기</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value)}
+                  placeholder="초대 코드를 입력하세요"
+                  className="flex-1 h-[50px] px-4 rounded-[12px] border border-border bg-card text-[16px] text-foreground text-center font-mono tracking-[0.2em] placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+                />
+                <button
+                  onClick={joinFamily}
+                  className="h-[50px] px-5 bg-primary text-primary-foreground rounded-[12px] text-[14px] font-semibold whitespace-nowrap"
+                >
+                  참여
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           <>
@@ -278,42 +287,12 @@ const FamilyLink = () => {
                     </div>
                     {m.email && <p className="text-[11px] text-muted-foreground">{m.email}</p>}
                   </div>
-                  <span className="text-[11px] text-muted-foreground">
-                    {m.user_id === user?.id ? `Lv. ${currentUser.level} 펼쳐지는 떡잎` : "Lv. 1 새싹"}
-                  </span>
                 </div>
               ))}
             </div>
           </>
         )}
       </div>
-
-      {/* Join Modal */}
-      {showJoinModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-foreground/40" onClick={() => setShowJoinModal(false)} />
-          <div className="relative bg-card rounded-[20px] w-[320px] p-6">
-            <h3 className="text-[18px] font-bold text-foreground mb-4">초대 코드 입력</h3>
-            <input
-              type="text"
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              placeholder="초대 코드를 입력하세요"
-              className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-accent text-[16px] text-foreground text-center font-mono tracking-[0.2em] placeholder:text-muted-foreground outline-none"
-            />
-            <div className="flex gap-3 mt-4">
-              <button onClick={() => setShowJoinModal(false)}
-                className="flex-1 h-[44px] rounded-[12px] border border-border text-[14px] font-medium text-foreground">
-                취소
-              </button>
-              <button onClick={joinFamily}
-                className="flex-1 h-[44px] rounded-[12px] bg-primary text-primary-foreground text-[14px] font-medium">
-                참여하기
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <BottomNavigation />
     </div>

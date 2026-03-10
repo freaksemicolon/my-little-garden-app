@@ -1,26 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bell, ChevronRight } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
-import { currentUser, plantsData, familyMembers } from "@/data/mockData";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 type Tab = "together" | "farewell" | "settings";
 
-const departedPlants = [
-  { id: "d1", nickname: "올리", species: "올리브나무", image: "🫒" },
-  { id: "d2", nickname: "바질이", species: "바질", image: "🌿" },
-];
-
 const MyPage = () => {
   const navigate = useNavigate();
-  const { profile, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [activePlants, setActivePlants] = useState<any[]>([]);
+  const [deadPlants, setDeadPlants] = useState<any[]>([]);
+  const [familyCount, setFamilyCount] = useState(0);
+  const [levelInfo, setLevelInfo] = useState({ level: 1, exp: 0 });
 
-  const displayName = profile?.nickname || currentUser.name;
-  const displayEmail = profile?.email || "nayeon@example.com";
+  const displayName = profile?.nickname || "사용자";
+  const displayEmail = profile?.email || "";
+
+  useEffect(() => {
+    if (!user) return;
+    
+    // Fetch active plants (not dead)
+    supabase
+      .from("user_plants")
+      .select("*")
+      .eq("user_id", user.id)
+      .neq("health_status", "죽음")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setActivePlants(data || []));
+
+    // Fetch dead plants
+    supabase
+      .from("user_plants")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("health_status", "죽음")
+      .order("updated_at", { ascending: false })
+      .then(({ data }) => setDeadPlants(data || []));
+
+    // Fetch family member count
+    supabase
+      .from("family_members")
+      .select("group_id")
+      .eq("user_id", user.id)
+      .limit(1)
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          supabase
+            .from("family_members")
+            .select("id", { count: "exact" })
+            .eq("group_id", data[0].group_id)
+            .then(({ count }) => setFamilyCount(count || 0));
+        }
+      });
+
+    // Fetch level info
+    supabase
+      .from("profiles")
+      .select("level, exp")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data) setLevelInfo({ level: data.level ?? 1, exp: data.exp ?? 0 });
+      });
+  }, [user]);
+
+  const getLevelTitle = (level: number) => {
+    if (level <= 1) return "새싹";
+    if (level <= 2) return "떡잎";
+    if (level <= 3) return "펼쳐지는 떡잎";
+    if (level <= 5) return "활짝 펴진 떡잎";
+    if (level <= 7) return "초록 가드너";
+    return "마스터 가드너";
+  };
+
+  const maxExp = levelInfo.level * 300;
 
   const renderDefaultContent = () => (
     <>
@@ -31,29 +89,31 @@ const MyPage = () => {
         <span className="text-[28px]">👨‍👩‍👧</span>
         <div className="flex-1 text-left">
           <p className="text-[15px] font-semibold text-foreground">가족 연동 관리</p>
-          <p className="text-[12px] text-muted-foreground">현재 {familyMembers.length}명의 가족과 관리하고 있어요</p>
+          <p className="text-[12px] text-muted-foreground">
+            {familyCount > 0 ? `현재 ${familyCount}명의 가족과 관리하고 있어요` : "가족과 함께 식물을 관리해보세요"}
+          </p>
         </div>
         <ChevronRight size={20} className="text-muted-foreground" />
       </button>
 
       <button
         onClick={() => navigate("/gardening-level")}
-        className="w-full bg-[hsl(var(--accent))] rounded-[16px] shadow-card p-4 mt-3 flex items-stretch gap-0 overflow-hidden"
+        className="w-full bg-accent rounded-[16px] shadow-card p-4 mt-3 flex items-stretch gap-0 overflow-hidden"
       >
         <div className="flex-1 text-left py-1">
           <p className="text-[12px] text-muted-foreground mb-1">가드닝 레벨</p>
           <p className="text-[22px] font-bold text-foreground leading-tight">
-            Lv. {currentUser.level}{" "}
-            <span className="text-[16px] font-semibold">펼쳐지는 떡잎</span>
+            Lv. {levelInfo.level}{" "}
+            <span className="text-[16px] font-semibold">{getLevelTitle(levelInfo.level)}</span>
           </p>
           <p className="text-[12px] text-muted-foreground mt-1">
-            {currentUser.exp}/{currentUser.maxExp} xp (다음 레벨까지{" "}
-            {Math.round(((currentUser.maxExp - currentUser.exp) / currentUser.maxExp) * 100)}%)
+            {levelInfo.exp}/{maxExp} xp (다음 레벨까지{" "}
+            {Math.round(((maxExp - levelInfo.exp) / maxExp) * 100)}%)
           </p>
           <div className="w-full h-[6px] bg-border rounded-full mt-2">
             <div
               className="h-full bg-primary rounded-full transition-all"
-              style={{ width: `${(currentUser.exp / currentUser.maxExp) * 100}%` }}
+              style={{ width: `${Math.min((levelInfo.exp / maxExp) * 100, 100)}%` }}
             />
           </div>
         </div>
@@ -66,36 +126,51 @@ const MyPage = () => {
 
   const renderTogetherContent = () => (
     <div className="flex flex-col gap-3 mt-4">
-      {plantsData.map((plant) => (
-        <button key={plant.id} onClick={() => navigate(`/plant/${plant.id}`)}
-          className="w-full bg-card rounded-[16px] shadow-card p-4 flex items-center gap-3">
-          <div className="w-[56px] h-[56px] rounded-[12px] bg-accent overflow-hidden flex items-center justify-center flex-shrink-0">
-            <img src={plant.image} alt={plant.nickname} className="w-[44px] h-[44px] object-contain" />
-          </div>
-          <div className="flex-1 text-left">
-            <p className="text-[15px] font-semibold text-foreground">{plant.nickname}</p>
-            <p className="text-[12px] text-muted-foreground">{plant.species}</p>
-          </div>
-          <ChevronRight size={20} className="text-muted-foreground" />
-        </button>
-      ))}
+      {activePlants.length === 0 ? (
+        <p className="text-center text-muted-foreground py-8">등록된 식물이 없어요</p>
+      ) : (
+        activePlants.map((plant) => (
+          <button key={plant.id} onClick={() => navigate(`/plant/${plant.id}`)}
+            className="w-full bg-card rounded-[16px] shadow-card p-4 flex items-center gap-3">
+            <div className="w-[56px] h-[56px] rounded-[12px] bg-accent overflow-hidden flex items-center justify-center flex-shrink-0">
+              {plant.image_url ? (
+                <img src={plant.image_url} alt={plant.nickname} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[28px]">🌱</span>
+              )}
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-[15px] font-semibold text-foreground">{plant.nickname}</p>
+              <p className="text-[12px] text-muted-foreground">{plant.species}</p>
+            </div>
+            <ChevronRight size={20} className="text-muted-foreground" />
+          </button>
+        ))
+      )}
     </div>
   );
 
   const renderFarewellContent = () => (
     <div className="flex flex-col gap-3 mt-4">
-      {departedPlants.map((plant) => (
-        <div key={plant.id} className="w-full bg-card rounded-[16px] shadow-card p-4 flex items-center gap-3">
-          <div className="w-[56px] h-[56px] rounded-[12px] bg-accent overflow-hidden flex items-center justify-center flex-shrink-0">
-            <span className="text-[28px]">{plant.image}</span>
+      {deadPlants.length === 0 ? (
+        <p className="text-center text-muted-foreground py-8">작별한 친구가 없어요 🌿</p>
+      ) : (
+        deadPlants.map((plant) => (
+          <div key={plant.id} className="w-full bg-card rounded-[16px] shadow-card p-4 flex items-center gap-3 opacity-70">
+            <div className="w-[56px] h-[56px] rounded-[12px] bg-accent overflow-hidden flex items-center justify-center flex-shrink-0">
+              {plant.image_url ? (
+                <img src={plant.image_url} alt={plant.nickname} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[28px]">🪴</span>
+              )}
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-[15px] font-semibold text-foreground">{plant.nickname}</p>
+              <p className="text-[12px] text-muted-foreground">{plant.species}</p>
+            </div>
           </div>
-          <div className="flex-1 text-left">
-            <p className="text-[15px] font-semibold text-foreground">{plant.nickname}</p>
-            <p className="text-[12px] text-muted-foreground">{plant.species}</p>
-          </div>
-          <ChevronRight size={20} className="text-muted-foreground" />
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 
