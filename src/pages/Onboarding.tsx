@@ -188,7 +188,7 @@ const Onboarding = () => {
                 <div className="px-6 flex-1 flex flex-col gap-4">
                   <button
                     onClick={() => {
-                      localStorage.setItem("hasSeenOnboarding", "true");
+                      localStorage.setItem(`hasSeenOnboarding_${JSON.parse(localStorage.getItem("sb-felmqzrkkqyimknnefdq-auth-token") || "{}").user?.id || "unknown"}`, "true");
                       navigate("/plant-recommendation");
                     }}
                     className="bg-card rounded-[20px] shadow-card py-12 flex flex-col items-center gap-3"
