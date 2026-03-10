@@ -33,7 +33,7 @@ const PlantDetail = () => {
     );
   }
 
-  const plantImage = plant.image_url || plantSucculent;
+  const plantImage = plant.image_url || plant3dSucculent;
   const adoptionDate = plant.adoption_date ? new Date(plant.adoption_date) : null;
   const dateStr = adoptionDate
     ? `${adoptionDate.getFullYear()}년 ${String(adoptionDate.getMonth() + 1).padStart(2, "0")}월 ${String(adoptionDate.getDate()).padStart(2, "0")}일부터 함께하는 중`
