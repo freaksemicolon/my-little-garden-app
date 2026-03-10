@@ -45,21 +45,26 @@ const Login = () => {
   };
 
   const handleGoogleLogin = async () => {
-    const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/home`,
+      },
     });
+  
     if (error) {
-      toast({ title: "Google 로그인 실패", description: String(error), variant: "destructive" });
+      toast({
+        title: "Google 로그인 실패",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
   const handleAppleLogin = async () => {
-    const { error } = await lovable.auth.signInWithOAuth("apple", {
-      redirect_uri: window.location.origin,
+    toast({
+      title: "Apple 로그인은 아직 설정되지 않았습니다.",
     });
-    if (error) {
-      toast({ title: "Apple 로그인 실패", description: String(error), variant: "destructive" });
-    }
   };
 
   const handleSocialLogin = (provider: string) => {
