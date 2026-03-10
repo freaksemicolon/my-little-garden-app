@@ -37,6 +37,15 @@ const Login = () => {
     }
   };
 
+  const handleAppleLogin = async () => {
+    const { error } = await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin,
+    });
+    if (error) {
+      toast({ title: "Apple 로그인 실패", description: String(error), variant: "destructive" });
+    }
+  };
+
   const handleSocialLogin = (provider: string) => {
     toast({ title: `${provider} 로그인은 준비 중입니다` });
   };
