@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Calendar, ChevronDown, Camera } from "lucide-react";
+import { ChevronLeft, Calendar, ChevronDown, Camera, Image, X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreatePlant, useUpdatePlant, usePlant } from "@/hooks/usePlants";
@@ -27,7 +27,9 @@ const PlantRegister = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(existingPlant?.image_url || null);
   const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const albumInputRef = useRef<HTMLInputElement>(null);
 
   // Sync form when existingPlant loads
   useState(() => {
@@ -51,6 +53,7 @@ const PlantRegister = () => {
     }
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
+    setShowImagePicker(false);
   };
 
   const uploadImage = async (): Promise<string | null> => {
@@ -134,26 +137,85 @@ const PlantRegister = () => {
         <div className="flex justify-center pt-4 pb-6">
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => setShowImagePicker(true)}
             className="relative w-[160px] h-[160px] rounded-full bg-accent flex items-center justify-center overflow-hidden group"
           >
             {imagePreview ? (
               <img src={imagePreview} alt="식물 사진" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-[64px]">🌱</span>
+              <div className="flex flex-col items-center gap-1">
+                <Camera size={32} className="text-muted-foreground" />
+                <span className="text-[12px] text-muted-foreground">사진 추가</span>
+              </div>
             )}
             <div className="absolute inset-0 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
               <Camera size={28} className="text-background" />
             </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageSelect}
-              className="hidden"
-            />
           </button>
+          {/* Hidden file inputs */}
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleImageSelect}
+            className="hidden"
+          />
+          <input
+            ref={albumInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageSelect}
+            className="hidden"
+          />
         </div>
+
+        {/* Image Picker Bottom Sheet */}
+        {showImagePicker && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={() => setShowImagePicker(false)}>
+            <div className="absolute inset-0 bg-foreground/40" />
+            <div
+              className="relative w-full max-w-[393px] bg-card rounded-t-[20px] p-5 pb-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-[17px] font-bold text-foreground">사진 선택</h3>
+                <button onClick={() => setShowImagePicker(false)}>
+                  <X size={22} className="text-muted-foreground" />
+                </button>
+              </div>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => cameraInputRef.current?.click()}
+                  className="flex items-center gap-3 w-full h-[52px] px-4 rounded-[14px] bg-accent text-foreground text-[15px] font-medium"
+                >
+                  <Camera size={22} className="text-primary" />
+                  카메라로 촬영
+                </button>
+                <button
+                  onClick={() => albumInputRef.current?.click()}
+                  className="flex items-center gap-3 w-full h-[52px] px-4 rounded-[14px] bg-accent text-foreground text-[15px] font-medium"
+                >
+                  <Image size={22} className="text-primary" />
+                  앨범에서 선택
+                </button>
+                {imagePreview && (
+                  <button
+                    onClick={() => {
+                      setImageFile(null);
+                      setImagePreview(null);
+                      setShowImagePicker(false);
+                    }}
+                    className="flex items-center gap-3 w-full h-[52px] px-4 rounded-[14px] bg-destructive/10 text-destructive text-[15px] font-medium"
+                  >
+                    <X size={22} />
+                    사진 삭제
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Nickname */}
         <div className="mb-5">
