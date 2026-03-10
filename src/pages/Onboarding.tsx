@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import plantSucculent from "@/assets/plant-succulent.png";
+import { useAuth } from "@/contexts/AuthContext";
 
 type LightOption = "햇빛 쨍쨍" | "보통" | "빛이 적어요" | null;
 type AirOption = "잘 통해요" | "보통" | "안 통해요" | null;
