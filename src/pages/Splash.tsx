@@ -11,11 +11,15 @@ const Splash = () => {
     if (loading) return;
 
     const timer = setTimeout(() => {
-      const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
-      if (user && hasSeenOnboarding) {
-        navigate("/home");
+      if (!user) {
+        navigate("/login");
       } else {
-        navigate("/onboarding");
+        const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+        if (hasSeenOnboarding) {
+          navigate("/home");
+        } else {
+          navigate("/onboarding");
+        }
       }
     }, 2000);
     return () => clearTimeout(timer);
