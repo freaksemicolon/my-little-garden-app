@@ -76,7 +76,7 @@ const MyPlants = () => {
                   onClick={() => navigate(item.path)}
                   className="w-full bg-card rounded-[16px] shadow-card px-4 py-4 flex items-center gap-3 text-left"
                 >
-                  <img src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain flex-shrink-0" />
+                  <span className="text-[28px] flex-shrink-0">{item.emoji}</span>
                   <div className="flex-1">
                     <p className="text-[15px] font-semibold text-foreground">{item.label}</p>
                     <p className="text-[12px] text-muted-foreground mt-0.5">{item.desc}</p>
