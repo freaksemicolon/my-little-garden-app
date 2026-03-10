@@ -169,6 +169,12 @@ const Onboarding = () => {
                       ))}
                     </div>
                   </div>
+                  <button
+                    onClick={handleNext}
+                    className="mt-4 w-full h-[52px] bg-primary text-primary-foreground rounded-full text-[16px] font-semibold"
+                  >
+                    다음
+                  </button>
                 </div>
               </div>
             )}
