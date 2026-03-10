@@ -275,7 +275,9 @@ export type Database = {
           avatar: string | null
           created_at: string
           email: string
+          exp: number
           id: string
+          level: number
           nickname: string
           updated_at: string
           user_id: string
@@ -284,7 +286,9 @@ export type Database = {
           avatar?: string | null
           created_at?: string
           email?: string
+          exp?: number
           id?: string
+          level?: number
           nickname?: string
           updated_at?: string
           user_id: string
@@ -293,7 +297,9 @@ export type Database = {
           avatar?: string | null
           created_at?: string
           email?: string
+          exp?: number
           id?: string
+          level?: number
           nickname?: string
           updated_at?: string
           user_id?: string
