@@ -45,7 +45,7 @@ const Onboarding = () => {
 
   return (
     <div
-      className="mobile-container flex flex-col min-h-screen bg-beige-gradient"
+      className="mobile-container flex flex-col min-h-screen bg-white"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >

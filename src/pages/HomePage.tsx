@@ -75,7 +75,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient pb-[90px]">
+    <div className="mobile-container flex flex-col min-h-screen bg-white pb-[90px]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
         <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
