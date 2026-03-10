@@ -239,10 +239,10 @@ export interface RecommendedPlant {
 }
 
 export const recommendedPlants: RecommendedPlant[] = [
-  { id: "r1", name: "스킨답서스", nameEn: "Pothos", image: plantMonstera, tags: ["#초보식집사_추천", "#물주기_깜빡해도_거뜬"] },
-  { id: "r2", name: "산세베리아", nameEn: "Snake Plant", image: plantCactus, tags: ["#초보식집사_추천", "#햇빛이_부족한_방", "#반려동물_안전"] },
-  { id: "r3", name: "테이블 야자", nameEn: "Parlor Palm", image: plantSucculent, tags: ["#햇빛이_부족한_방", "#반려동물_안전"] },
-  { id: "r4", name: "몬스테라", nameEn: "Monstera", image: plantMonstera, tags: ["#초보식집사_추천", "#프로 식물킬러_졸업"] },
+  { id: "r1", name: "스킨답서스", nameEn: "Pothos", image: plantPothos, tags: ["#초보식집사_추천", "#물주기_깜빡해도_거뜬"] },
+  { id: "r2", name: "산세베리아", nameEn: "Snake Plant", image: plantSansevieria, tags: ["#초보식집사_추천", "#햇빛이_부족한_방", "#반려동물_안전"] },
+  { id: "r3", name: "산세베리아 (화이트)", nameEn: "Snake Plant White", image: plantSansevieria2, tags: ["#햇빛이_부족한_방", "#반려동물_안전"] },
+  { id: "r4", name: "올리브나무", nameEn: "Olive Tree", image: plantOlive, tags: ["#초보식집사_추천", "#프로 식물킬러_졸업"] },
 ];
 
 export const recommendTags = [
