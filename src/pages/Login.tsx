@@ -13,7 +13,7 @@ const Login = () => {
 
   useEffect(() => {
     if (!authLoading && user) {
-      const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+      const hasSeenOnboarding = localStorage.getItem(`hasSeenOnboarding_${user.id}`);
       if (hasSeenOnboarding === "true") {
         navigate("/home");
       } else {
@@ -35,7 +35,7 @@ const Login = () => {
       toast({ title: "로그인 실패", description: error.message, variant: "destructive" });
       return;
     }
-    localStorage.setItem("hasSeenOnboarding", "true");
+    localStorage.setItem(`hasSeenOnboarding_${user?.id || "unknown"}`, "true");
     navigate("/home");
   };
 

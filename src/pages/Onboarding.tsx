@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import plantSucculent from "@/assets/plant-succulent.png";
+import { useAuth } from "@/contexts/AuthContext";
 
 type LightOption = "햇빛 쨍쨍" | "보통" | "빛이 적어요" | null;
 type AirOption = "잘 통해요" | "보통" | "안 통해요" | null;
@@ -10,6 +11,7 @@ type PetOption = "있어요" | "없어요" | null;
 const Onboarding = () => {
   const [current, setCurrent] = useState(0);
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [touchStart, setTouchStart] = useState(0);
 
   // Slide 3 state
@@ -188,7 +190,7 @@ const Onboarding = () => {
                 <div className="px-6 flex-1 flex flex-col gap-4">
                   <button
                     onClick={() => {
-                      localStorage.setItem("hasSeenOnboarding", "true");
+                      localStorage.setItem(`hasSeenOnboarding_${user?.id || "unknown"}`, "true");
                       navigate("/plant-recommendation");
                     }}
                     className="bg-card rounded-[20px] shadow-card py-12 flex flex-col items-center gap-3"
@@ -198,7 +200,7 @@ const Onboarding = () => {
                   </button>
                   <button
                     onClick={() => {
-                      localStorage.setItem("hasSeenOnboarding", "true");
+                      localStorage.setItem(`hasSeenOnboarding_${user?.id || "unknown"}`, "true");
                       navigate("/plant-register");
                     }}
                     className="bg-card rounded-[20px] shadow-card py-12 flex flex-col items-center gap-3"
