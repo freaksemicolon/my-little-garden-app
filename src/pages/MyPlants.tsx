@@ -3,11 +3,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import BottomNavigation from "@/components/BottomNavigation";
 import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
-import iconSearchPlant from "@/assets/icon-search-plant.png";
-import iconCameraPlant from "@/assets/icon-camera-plant.png";
-import iconClipboard from "@/assets/icon-clipboard.png";
-import iconSprout from "@/assets/icon-sprout.png";
-import iconZeroWaste from "@/assets/icon-zero-waste.png";
 
 const menuSections = [
   {
