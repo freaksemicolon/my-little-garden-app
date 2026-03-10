@@ -65,8 +65,8 @@ const Onboarding = () => {
                 </div>
                 <div className="flex-1 flex flex-col items-center justify-center px-6">
                   {/* Speech bubble */}
-                  <div className="bg-card rounded-[16px] shadow-card px-6 py-4 mb-2 relative">
-                    <p className="text-[16px] text-foreground">안녕 {`나연`}님!{"\n"}오늘 제 기분은 어때 보이나요?</p>
+                   <div className="bg-card rounded-[16px] shadow-card px-6 py-4 mb-2 relative">
+                    <p className="text-[16px] text-foreground">안녕 {user?.user_metadata?.nickname || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "회원"}님!{"\n"}오늘 제 기분은 어때 보이나요?</p>
                     <div className="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-card" />
                   </div>
                   <img src={plantSucculent} alt="plant" className="w-[180px] h-[180px] object-contain mt-4" />
