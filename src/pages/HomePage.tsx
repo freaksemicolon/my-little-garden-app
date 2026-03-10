@@ -5,6 +5,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlants, getWateringStatusFromPlant } from "@/hooks/usePlants";
 import { supabase } from "@/integrations/supabase/client";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const HomePage = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient pb-[90px]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
-        <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button onClick={() => setShowNotifications(!showNotifications)} className="p-2 relative">
           <Bell size={22} className="text-foreground" />
           {unreadCount > 0 && (

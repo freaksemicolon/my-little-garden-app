@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconGoogle from "@/assets/icon-google.png";
+import iconApple from "@/assets/icon-apple.png";
+import iconKakao from "@/assets/icon-kakao.png";
+import iconNaver from "@/assets/icon-naver.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -65,7 +70,7 @@ const Login = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient">
       <div className="flex-1 flex flex-col justify-center px-6">
         <div className="mb-10">
-          <h1 className="text-[32px] font-bold tracking-tight text-primary">MyLittleGarden</h1>
+          <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[36px] object-contain" />
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-3">
@@ -99,17 +104,17 @@ const Login = () => {
         </div>
 
         <div className="flex justify-center gap-5">
-          <button onClick={() => handleSocialLogin("카카오")} className="w-[56px] h-[56px] rounded-full bg-[hsl(50,100%,55%)] flex items-center justify-center shadow-sm">
-            <span className="text-[16px] font-bold text-[hsl(25,30%,20%)]">TALK</span>
+          <button onClick={() => handleSocialLogin("카카오")} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconKakao} alt="카카오" className="w-full h-full object-cover" />
           </button>
-          <button onClick={() => handleSocialLogin("네이버")} className="w-[56px] h-[56px] rounded-full bg-[hsl(145,63%,42%)] flex items-center justify-center shadow-sm">
-            <span className="text-[22px] font-bold text-primary-foreground">N</span>
+          <button onClick={() => handleSocialLogin("네이버")} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconNaver} alt="네이버" className="w-full h-full object-cover" />
           </button>
-          <button onClick={handleAppleLogin} className="w-[56px] h-[56px] rounded-full bg-[hsl(220,10%,20%)] flex items-center justify-center shadow-sm">
-            <span className="text-[22px] text-primary-foreground">🍎</span>
+          <button onClick={handleAppleLogin} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconApple} alt="Apple" className="w-full h-full object-cover" />
           </button>
-          <button onClick={handleGoogleLogin} className="w-[56px] h-[56px] rounded-full bg-card flex items-center justify-center border border-border shadow-sm">
-            <span className="text-[22px] font-bold">G</span>
+          <button onClick={handleGoogleLogin} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconGoogle} alt="Google" className="w-full h-full object-cover" />
           </button>
         </div>
       </div>
