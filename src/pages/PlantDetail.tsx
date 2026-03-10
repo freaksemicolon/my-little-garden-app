@@ -5,7 +5,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { usePlant, useWaterPlant, getWateringStatusFromPlant } from "@/hooks/usePlants";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import plantSucculent from "@/assets/plant-succulent.png";
+import plant3dSucculent from "@/assets/plant-3d-succulent.png";
 
 const PlantDetail = () => {
   const navigate = useNavigate();
