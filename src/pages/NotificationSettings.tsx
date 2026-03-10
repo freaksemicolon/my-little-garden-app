@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Bell } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { defaultNotificationSettings, type NotificationSetting } from "@/data/mockData";
 import BottomNavigation from "@/components/BottomNavigation";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { toast } from "sonner";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconBell from "@/assets/icon-bell.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
 
 const settingsMeta: Record<string, { emoji: string; group?: string; extra?: string }> = {
   push: { emoji: "🔔" },
