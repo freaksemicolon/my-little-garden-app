@@ -5,7 +5,7 @@ import { defaultNotificationSettings, type NotificationSetting } from "@/data/mo
 import BottomNavigation from "@/components/BottomNavigation";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { toast } from "sonner";
-import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
 import iconBell from "@/assets/icon-bell.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 

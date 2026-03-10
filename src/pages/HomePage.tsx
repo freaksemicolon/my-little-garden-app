@@ -245,7 +245,7 @@ const HomePage = () => {
                 onClick={() => navigate("/plant-register")}
                 className="bg-card rounded-[20px] shadow-card py-10 flex flex-col items-center gap-3"
               >
-                <span className="text-[48px]">📷</span>
+                <img src={iconCameraPlant} alt="식물 등록" className="w-[64px] h-[64px] object-contain" />
                 <span className="text-[16px] font-bold text-foreground">
                   {`이미 키우는 식물`}{"\n"}{`등록하기`}
                 </span>
