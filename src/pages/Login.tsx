@@ -85,7 +85,7 @@ const Login = () => {
           <button onClick={() => handleSocialLogin("네이버")} className="w-[56px] h-[56px] rounded-full bg-[hsl(145,63%,42%)] flex items-center justify-center shadow-sm">
             <span className="text-[22px] font-bold text-primary-foreground">N</span>
           </button>
-          <button onClick={() => handleSocialLogin("애플")} className="w-[56px] h-[56px] rounded-full bg-[hsl(220,10%,20%)] flex items-center justify-center shadow-sm">
+          <button onClick={handleAppleLogin} className="w-[56px] h-[56px] rounded-full bg-[hsl(220,10%,20%)] flex items-center justify-center shadow-sm">
             <span className="text-[22px] text-primary-foreground">🍎</span>
           </button>
           <button onClick={handleGoogleLogin} className="w-[56px] h-[56px] rounded-full bg-card flex items-center justify-center border border-border shadow-sm">
