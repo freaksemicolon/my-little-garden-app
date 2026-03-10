@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
 import iconGoogle from "@/assets/icon-google.png";
 import iconApple from "@/assets/icon-apple.png";
