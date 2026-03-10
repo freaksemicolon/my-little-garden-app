@@ -236,7 +236,7 @@ const HomePage = () => {
                 onClick={() => navigate("/plant-recommendation")}
                 className="bg-card rounded-[20px] shadow-card py-10 flex flex-col items-center gap-3"
               >
-                <span className="text-[48px]">🔍</span>
+                <img src={iconSearchPlant} alt="식물 추천" className="w-[64px] h-[64px] object-contain" />
                 <span className="text-[16px] font-bold text-foreground">
                   {`나에게 맞는 식물`}{"\n"}{`추천받기`}
                 </span>
