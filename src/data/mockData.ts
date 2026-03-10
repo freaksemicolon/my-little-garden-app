@@ -78,7 +78,7 @@ export const plantsData: PlantData[] = [
     id: "1",
     nickname: "몬몬이",
     species: "몬스테라",
-    image: plantSucculent,
+    image: plant3d,
     adoptionDate: "2026-01-03",
     wateringCycle: 9,
     wateringUnit: "일",
