@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNavigation from "@/components/BottomNavigation";
 import { recommendedPlants, recommendTags } from "@/data/mockData";
-import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 
 const PlantRecommendation = () => {

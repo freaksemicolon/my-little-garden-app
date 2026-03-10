@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 import iconSettings from "@/assets/icon-settings.png";
 import iconGrowingPlant from "@/assets/icon-growing-plant.png";

@@ -5,9 +5,11 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlants, getWateringStatusFromPlant } from "@/hooks/usePlants";
 import { supabase } from "@/integrations/supabase/client";
-import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 import iconTree from "@/assets/icon-tree.png";
+import iconSearchPlant from "@/assets/icon-search-plant.png";
+import iconCameraPlant from "@/assets/icon-camera-plant.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -232,7 +234,7 @@ const HomePage = () => {
                 onClick={() => navigate("/plant-recommendation")}
                 className="bg-card rounded-[20px] shadow-card py-10 flex flex-col items-center gap-3"
               >
-                <span className="text-[48px]">🔍</span>
+                <img src={iconSearchPlant} alt="식물 추천" className="w-[64px] h-[64px] object-contain" />
                 <span className="text-[16px] font-bold text-foreground">
                   {`나에게 맞는 식물`}{"\n"}{`추천받기`}
                 </span>
@@ -241,7 +243,7 @@ const HomePage = () => {
                 onClick={() => navigate("/plant-register")}
                 className="bg-card rounded-[20px] shadow-card py-10 flex flex-col items-center gap-3"
               >
-                <span className="text-[48px]">📷</span>
+                <img src={iconCameraPlant} alt="식물 등록" className="w-[64px] h-[64px] object-contain" />
                 <span className="text-[16px] font-bold text-foreground">
                   {`이미 키우는 식물`}{"\n"}{`등록하기`}
                 </span>
