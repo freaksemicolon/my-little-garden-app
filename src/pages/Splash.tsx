@@ -1,14 +1,25 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Splash = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    const timer = setTimeout(() => navigate("/onboarding"), 2000);
+    if (loading) return;
+
+    const timer = setTimeout(() => {
+      const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+      if (user && hasSeenOnboarding) {
+        navigate("/home");
+      } else {
+        navigate("/onboarding");
+      }
+    }, 2000);
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, user, loading]);
 
   return (
     <div className="mobile-container flex flex-col items-center justify-center min-h-screen bg-beige-gradient">
@@ -18,7 +29,6 @@ const Splash = () => {
         transition={{ duration: 0.6 }}
         className="flex flex-col items-center"
       >
-        {/* MyLittleGarden text logo */}
         <h1 className="text-[32px] font-bold tracking-tight">
           <span className="text-primary">My</span>
           <span className="text-primary">Little</span>
@@ -28,7 +38,6 @@ const Splash = () => {
         </h1>
       </motion.div>
 
-      {/* Rootive brand at bottom */}
       <div className="absolute bottom-12">
         <p className="text-[16px] font-semibold">
           <span className="text-foreground">R</span>
