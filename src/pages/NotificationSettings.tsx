@@ -74,9 +74,9 @@ const NotificationSettings = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
-        <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button className="p-2">
-          <Bell size={22} className="text-foreground" />
+          <img src={iconBell} alt="알림" className="w-[24px] h-[24px] object-contain" />
         </button>
       </div>
 
