@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,7 +17,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm install
@@ -25,22 +27,38 @@ jobs:
         run: npm run build
 
       - name: Install Capacitor
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+        run: npm install @capacitor/core @capacitor/cli @capacitor/android
 
-      - name: Init Capacitor
+      - name: Create capacitor.config.ts
         run: |
-          npx cap init "My Little Garden" "com.freak.mylittlegarden" --web-dir dist
+          cat > capacitor.config.ts <<'EOF'
+          import type { CapacitorConfig } from '@capacitor/cli';
 
-      - name: Add Android
+          const config: CapacitorConfig = {
+            appId: 'com.freak.mylittlegarden',
+            appName: 'My Little Garden',
+            webDir: 'dist',
+          };
+
+          export default config;
+          EOF
+
+      - name: Add Android platform
         run: npx cap add android
 
       - name: Sync Android
         run: npx cap sync android
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
       - name: Build APK
         run: |
           cd android
+          chmod +x gradlew
           ./gradlew assembleDebug
 
       - name: Upload APK
