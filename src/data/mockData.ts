@@ -128,7 +128,7 @@ export const plantsData: PlantData[] = [
     id: "3",
     nickname: "선인장",
     species: "선인장",
-    image: plantCactus,
+    image: plant3d,
     adoptionDate: "2025-12-25",
     wateringCycle: 14,
     wateringUnit: "일",
