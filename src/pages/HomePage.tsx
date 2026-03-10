@@ -5,7 +5,11 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlants, getWateringStatusFromPlant } from "@/hooks/usePlants";
 import { supabase } from "@/integrations/supabase/client";
-import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
+import iconTree from "@/assets/icon-tree.png";
+import iconSearchPlant from "@/assets/icon-search-plant.png";
+import iconCameraPlant from "@/assets/icon-camera-plant.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 import iconTree from "@/assets/icon-tree.png";
 
