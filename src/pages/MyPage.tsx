@@ -8,6 +8,7 @@ import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 import iconSettings from "@/assets/icon-settings.png";
 import iconGrowingPlant from "@/assets/icon-growing-plant.png";
+import iconZeroWaste from "@/assets/icon-zero-waste.png";
 import iconTree from "@/assets/icon-tree.png";
 import plant3d from "@/assets/plant-3d-succulent.png";
 
