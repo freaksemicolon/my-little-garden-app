@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconGoogle from "@/assets/icon-google.png";
+import iconApple from "@/assets/icon-apple.png";
+import iconKakao from "@/assets/icon-kakao.png";
+import iconNaver from "@/assets/icon-naver.png";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -39,53 +43,77 @@ const Signup = () => {
   };
 
   return (
-    <div className="mobile-container flex flex-col min-h-screen bg-white">
-      <div className="flex items-center h-[56px] px-4 pt-2">
-        <button onClick={() => navigate(-1)} className="p-2">
-          <ChevronLeft size={24} className="text-foreground" />
-        </button>
-      </div>
-
-      <div className="flex-1 px-6 pt-4">
-        <div className="mb-8">
-          <h1 className="text-[28px] font-bold tracking-tight text-primary">MyLittleGarden</h1>
+    <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient">
+      <div className="flex-1 flex flex-col justify-center px-6">
+        <div className="mb-10">
+          <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[36px] object-contain" />
         </div>
 
         <form onSubmit={handleSignup} className="flex flex-col gap-3">
-          <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="닉네임"
-            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring" />
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@domain.com"
-            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring" />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호"
-            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring" />
-          <input type="password" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} placeholder="비밀번호 재확인"
-            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring" />
-          <button type="submit" disabled={loading}
-            className="w-full h-[52px] bg-primary text-primary-foreground rounded-[12px] text-[16px] font-semibold mt-2 disabled:opacity-50">
+          <input
+            type="text"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            placeholder="닉네임"
+            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+          />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email@domain.com"
+            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호"
+            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+          />
+          <input
+            type="password"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            placeholder="비밀번호 재확인"
+            className="w-full h-[50px] px-4 rounded-[12px] border border-border bg-card text-[14px] text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-[52px] bg-primary text-primary-foreground rounded-[12px] text-[16px] font-semibold mt-2 disabled:opacity-50"
+          >
             {loading ? "가입 중..." : "가입하기"}
           </button>
         </form>
 
-        <div className="flex items-center gap-3 my-6">
+        <div className="flex items-center gap-3 my-8">
           <div className="flex-1 h-px bg-foreground/20" />
           <span className="text-[13px] text-muted-foreground">또는</span>
           <div className="flex-1 h-px bg-foreground/20" />
         </div>
 
         <div className="flex justify-center gap-5">
-          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full bg-[hsl(50,100%,55%)] flex items-center justify-center shadow-sm">
-            <span className="text-[16px] font-bold text-[hsl(25,30%,20%)]">TALK</span>
+          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconKakao} alt="카카오" className="w-full h-full object-cover" />
           </button>
-          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full bg-[hsl(145,63%,42%)] flex items-center justify-center shadow-sm">
-            <span className="text-[22px] font-bold text-primary-foreground">N</span>
+          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconNaver} alt="네이버" className="w-full h-full object-cover" />
           </button>
-          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full bg-[hsl(220,10%,20%)] flex items-center justify-center shadow-sm">
-            <span className="text-[22px] text-primary-foreground">🍎</span>
+          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconApple} alt="Apple" className="w-full h-full object-cover" />
           </button>
-          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full bg-card flex items-center justify-center border border-border shadow-sm">
-            <span className="text-[22px] font-bold">G</span>
+          <button onClick={handleSocialSignup} className="w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm">
+            <img src={iconGoogle} alt="Google" className="w-full h-full object-cover" />
           </button>
         </div>
+      </div>
+
+      <div className="flex justify-center pb-12 gap-2">
+        <span className="text-[14px] text-foreground">이미 회원이신가요?</span>
+        <button onClick={() => navigate("/login")} className="text-[14px] font-semibold text-foreground underline">
+          로그인 하기
+        </button>
       </div>
     </div>
   );
