@@ -35,7 +35,7 @@ const Login = () => {
       toast({ title: "로그인 실패", description: error.message, variant: "destructive" });
       return;
     }
-    localStorage.setItem("hasSeenOnboarding", "true");
+    localStorage.setItem(`hasSeenOnboarding_${user?.id || "unknown"}`, "true");
     navigate("/home");
   };
 

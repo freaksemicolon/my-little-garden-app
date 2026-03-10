@@ -14,8 +14,8 @@ const Splash = () => {
       if (!user) {
         navigate("/login");
       } else {
-        const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
-        if (hasSeenOnboarding) {
+        const hasSeenOnboarding = localStorage.getItem(`hasSeenOnboarding_${user.id}`);
+        if (hasSeenOnboarding === "true") {
           navigate("/home");
         } else {
           navigate("/onboarding");
