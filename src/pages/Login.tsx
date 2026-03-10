@@ -13,7 +13,7 @@ const Login = () => {
 
   useEffect(() => {
     if (!authLoading && user) {
-      const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+      const hasSeenOnboarding = localStorage.getItem(`hasSeenOnboarding_${user.id}`);
       if (hasSeenOnboarding === "true") {
         navigate("/home");
       } else {
