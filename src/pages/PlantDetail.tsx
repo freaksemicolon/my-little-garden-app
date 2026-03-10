@@ -6,6 +6,8 @@ import { usePlant, useWaterPlant, getWateringStatusFromPlant } from "@/hooks/use
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import plant3dSucculent from "@/assets/plant-3d-succulent.png";
+import iconClipboard from "@/assets/icon-clipboard.png";
+import iconGrowingPlant from "@/assets/icon-growing-plant.png";
 
 const PlantDetail = () => {
   const navigate = useNavigate();
@@ -99,7 +101,7 @@ const PlantDetail = () => {
         {/* Memo Card */}
         {plant.memo && (
           <div className="bg-card rounded-[16px] shadow-card p-4 mb-4 flex items-start gap-3">
-            <span className="text-[28px]">📋</span>
+            <img src={iconClipboard} alt="memo" className="w-[32px] h-[32px] object-contain mt-0.5" />
             <div>
               <h3 className="text-[15px] font-bold text-foreground">{plant.nickname}를 위한 메모</h3>
               <p className="text-[13px] text-muted-foreground mt-1">{plant.memo}</p>
@@ -109,7 +111,7 @@ const PlantDetail = () => {
 
         {/* Bond Level */}
         <div className="bg-card rounded-[16px] shadow-card p-4 mb-4 flex items-start gap-3">
-          <span className="text-[28px]">💚</span>
+          <img src={iconGrowingPlant} alt="bond" className="w-[32px] h-[32px] object-contain mt-0.5" />
           <div className="flex-1">
             <h3 className="text-[15px] font-bold text-foreground">친밀도</h3>
             <div className="mt-2 w-full h-[8px] bg-muted rounded-full overflow-hidden">

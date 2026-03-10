@@ -1,19 +1,26 @@
 import { useNavigate } from "react-router-dom";
-import { Bell } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import BottomNavigation from "@/components/BottomNavigation";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
+import iconSearchPlant from "@/assets/icon-search-plant.png";
+import iconCameraPlant from "@/assets/icon-camera-plant.png";
+import iconClipboard from "@/assets/icon-clipboard.png";
+import iconSprout from "@/assets/icon-sprout.png";
+import iconZeroWaste from "@/assets/icon-zero-waste.png";
 
 const menuSections = [
   {
     title: "새로운 식물을 키우고 싶다면?",
     items: [
       {
-        emoji: "🌱",
+        icon: iconSearchPlant,
         label: "식물 추천받기",
         desc: "초보 집사도 걱정 없는 식물 맞춤 추천",
         path: "/plant-recommendation",
       },
       {
-        emoji: "🌿",
+        icon: iconCameraPlant,
         label: "새로운 식물 등록하기",
         desc: "우리 집에 온 새 식구 등록하기",
         path: "/plant-register",
@@ -24,13 +31,13 @@ const menuSections = [
     title: "오늘의 반려식물 케어 가이드",
     items: [
       {
-        emoji: "📅",
+        icon: iconSprout,
         label: "이번달 돌봄 일정",
         desc: "나만의 반려식물 다이어리",
         path: "/home",
       },
       {
-        emoji: "🩺",
+        icon: iconClipboard,
         label: "진단 히스토리",
         desc: "식물의 진단 기록과 처방전 모아보기",
         path: "/diagnosis-history",
@@ -41,7 +48,7 @@ const menuSections = [
     title: "마지막 안녕을 돕는 가이드",
     items: [
       {
-        emoji: "♻️",
+        icon: iconZeroWaste,
         label: "제로 웨이스트 가이드",
         desc: "친환경 이별 가이드로 마지막 인사하기",
         path: "/zero-waste",
@@ -57,9 +64,9 @@ const MyPlants = () => {
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
-        <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button onClick={() => navigate("/notification-settings")} className="p-2">
-          <Bell size={22} className="text-foreground" />
+          <img src={iconBellActive} alt="알림" className="w-[24px] h-[24px] object-contain" />
         </button>
       </div>
 
@@ -74,7 +81,7 @@ const MyPlants = () => {
                   onClick={() => navigate(item.path)}
                   className="w-full bg-card rounded-[16px] shadow-card px-4 py-4 flex items-center gap-3 text-left"
                 >
-                  <span className="text-[28px]">{item.emoji}</span>
+                  <img src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-[15px] font-semibold text-foreground">{item.label}</p>
                     <p className="text-[12px] text-muted-foreground mt-0.5">{item.desc}</p>

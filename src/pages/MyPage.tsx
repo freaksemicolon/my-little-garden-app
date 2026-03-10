@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import iconBellActive from "@/assets/icon-bell-active.png";
+import iconSettings from "@/assets/icon-settings.png";
+import iconGrowingPlant from "@/assets/icon-growing-plant.png";
+import iconTree from "@/assets/icon-tree.png";
+import plant3d from "@/assets/plant-3d-succulent.png";
 
 type Tab = "together" | "farewell" | "settings";
 
@@ -24,7 +30,6 @@ const MyPage = () => {
   useEffect(() => {
     if (!user) return;
     
-    // Fetch active plants (not dead)
     supabase
       .from("user_plants")
       .select("*")
@@ -33,7 +38,6 @@ const MyPage = () => {
       .order("created_at", { ascending: false })
       .then(({ data }) => setActivePlants(data || []));
 
-    // Fetch dead plants
     supabase
       .from("user_plants")
       .select("*")
@@ -42,7 +46,6 @@ const MyPage = () => {
       .order("updated_at", { ascending: false })
       .then(({ data }) => setDeadPlants(data || []));
 
-    // Fetch family member count
     supabase
       .from("family_members")
       .select("group_id")
@@ -58,7 +61,6 @@ const MyPage = () => {
         }
       });
 
-    // Fetch level info
     supabase
       .from("profiles")
       .select("level, exp")
@@ -118,7 +120,7 @@ const MyPage = () => {
           </div>
         </div>
         <div className="w-[100px] -mr-4 -mb-4 -mt-2 flex items-end justify-center">
-          <span className="text-[64px]">🌱</span>
+          <img src={iconTree} alt="tree" className="w-[64px] h-[64px] object-contain" />
         </div>
       </button>
     </>
@@ -136,7 +138,7 @@ const MyPage = () => {
               {plant.image_url ? (
                 <img src={plant.image_url} alt={plant.nickname} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-[28px]">🌱</span>
+                <img src={plant3d} alt={plant.nickname} className="w-[40px] h-[40px] object-contain" />
               )}
             </div>
             <div className="flex-1 text-left">
@@ -161,7 +163,7 @@ const MyPage = () => {
               {plant.image_url ? (
                 <img src={plant.image_url} alt={plant.nickname} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-[28px]">🪴</span>
+                <img src={plant3d} alt={plant.nickname} className="w-[40px] h-[40px] object-contain" />
               )}
             </div>
             <div className="flex-1 text-left">
@@ -178,7 +180,7 @@ const MyPage = () => {
     <div className="flex flex-col gap-3 mt-4">
       <button onClick={() => navigate("/notification-settings")}
         className="w-full bg-card rounded-[16px] shadow-card px-4 py-4 flex items-center gap-3">
-        <span className="text-[28px]">🔔</span>
+        <img src={iconBellActive} alt="알림" className="w-[28px] h-[28px] object-contain" />
         <div className="flex-1 text-left">
           <p className="text-[15px] font-semibold text-foreground">알림 설정</p>
           <p className="text-[12px] text-muted-foreground">알림이 켜진 상태에요.</p>
@@ -214,9 +216,9 @@ const MyPage = () => {
   return (
     <div className="mobile-container flex flex-col min-h-screen bg-background pb-[90px]">
       <div className="flex items-center justify-between px-5 pt-14 pb-2">
-        <h1 className="text-[20px] font-bold text-primary tracking-tight">MyLittleGarden</h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[24px] object-contain" />
         <button onClick={() => navigate("/notification-settings")} className="p-2">
-          <Bell size={22} className="text-foreground" />
+          <img src={iconBellActive} alt="알림" className="w-[24px] h-[24px] object-contain" />
         </button>
       </div>
 
@@ -231,15 +233,15 @@ const MyPage = () => {
 
         <div className="flex gap-2 mt-4">
           {([
-            { key: "together" as Tab, label: "함께하는 중", emoji: "🌱" },
-            { key: "farewell" as Tab, label: "작별한 친구들", emoji: "🪴" },
-            { key: "settings" as Tab, label: "설정", emoji: "⚙️" },
+            { key: "together" as Tab, label: "함께하는 중", icon: iconGrowingPlant },
+            { key: "farewell" as Tab, label: "작별한 친구들", icon: iconZeroWaste },
+            { key: "settings" as Tab, label: "설정", icon: iconSettings },
           ]).map((tab) => (
             <button key={tab.key} onClick={() => setActiveTab(activeTab === tab.key ? null : tab.key)}
               className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-[14px] border transition-all ${
                 activeTab === tab.key ? "bg-accent border-primary/20" : "bg-card border-border shadow-card"
               }`}>
-              <span className="text-[24px]">{tab.emoji}</span>
+              <img src={tab.icon} alt={tab.label} className="w-[28px] h-[28px] object-contain" />
               <span className="text-[11px] font-medium text-foreground">{tab.label}</span>
             </button>
           ))}
