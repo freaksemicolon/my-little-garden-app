@@ -181,14 +181,20 @@ const Onboarding = () => {
                 </div>
                 <div className="px-6 flex-1 flex flex-col gap-4">
                   <button
-                    onClick={() => navigate("/plant-recommendation")}
+                    onClick={() => {
+                      localStorage.setItem("hasSeenOnboarding", "true");
+                      navigate("/plant-recommendation");
+                    }}
                     className="bg-card rounded-[20px] shadow-card py-12 flex flex-col items-center gap-3"
                   >
                     <span className="text-[48px]">🔍</span>
                     <span className="text-[16px] font-bold text-foreground text-center">나에게 맞는 식물{"\n"}추천받기</span>
                   </button>
                   <button
-                    onClick={() => navigate("/plant-register")}
+                    onClick={() => {
+                      localStorage.setItem("hasSeenOnboarding", "true");
+                      navigate("/plant-register");
+                    }}
                     className="bg-card rounded-[20px] shadow-card py-12 flex flex-col items-center gap-3"
                   >
                     <span className="text-[48px]">📷</span>
