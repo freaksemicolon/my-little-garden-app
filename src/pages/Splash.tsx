@@ -28,7 +28,7 @@ const Splash = () => {
   }, [navigate, user, loading]);
 
   return (
-    <div className="mobile-container flex flex-col items-center justify-center min-h-screen bg-beige-gradient">
+    <div className="mobile-container flex flex-col items-center justify-center min-h-screen bg-white">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}

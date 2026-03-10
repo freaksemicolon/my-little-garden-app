@@ -67,7 +67,7 @@ const PlantDetail = () => {
       </div>
 
       {/* Plant Hero */}
-      <div className="bg-beige-gradient px-5 pt-4 pb-6 flex flex-col items-center">
+      <div className="bg-white px-5 pt-4 pb-6 flex flex-col items-center">
         <div className="w-[180px] h-[180px] rounded-full bg-accent/50 flex items-center justify-center overflow-hidden">
           <img src={plantImage} alt={plant.nickname} className={plant.image_url ? "w-full h-full object-cover" : "w-[140px] h-[140px] object-contain"} />
         </div>

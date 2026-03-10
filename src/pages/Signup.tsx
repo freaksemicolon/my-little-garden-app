@@ -39,7 +39,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="mobile-container flex flex-col min-h-screen bg-beige-gradient">
+    <div className="mobile-container flex flex-col min-h-screen bg-white">
       <div className="flex items-center h-[56px] px-4 pt-2">
         <button onClick={() => navigate(-1)} className="p-2">
           <ChevronLeft size={24} className="text-foreground" />
