@@ -8,8 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import logoMyLittleGarden from "@/assets/logo-mylittlegarden-black.png";
 import iconBellActive from "@/assets/icon-bell-active.png";
 import iconTree from "@/assets/icon-tree.png";
-import iconSearchPlant from "@/assets/icon-search-plant.png";
-import iconCameraPlant from "@/assets/icon-camera-plant.png";
+import iconSearch3d from "@/assets/icon-search-3d.png";
+import iconCamera3d from "@/assets/icon-camera-3d.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
