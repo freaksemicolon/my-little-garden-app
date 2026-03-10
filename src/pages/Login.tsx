@@ -5,8 +5,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { lovable } from "@/integrations/lovable/index";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { user, loading: authLoading, signIn } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      localStorage.setItem("hasSeenOnboarding", "true");
+      navigate("/home");
+    }
+  }, [user, authLoading, navigate]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
