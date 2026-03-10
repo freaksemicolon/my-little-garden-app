@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
+import logoRootive from "@/assets/logo-rootive.png";
 
 const Splash = () => {
   const navigate = useNavigate();
@@ -33,21 +35,11 @@ const Splash = () => {
         transition={{ duration: 0.6 }}
         className="flex flex-col items-center"
       >
-        <h1 className="text-[32px] font-bold tracking-tight">
-          <span className="text-primary">My</span>
-          <span className="text-primary">Little</span>
-          <span className="text-primary">Ga</span>
-          <span className="text-primary">r</span>
-          <span className="text-primary">den</span>
-        </h1>
+        <img src={logoMyLittleGarden} alt="MyLittleGarden" className="h-[36px] object-contain" />
       </motion.div>
 
       <div className="absolute bottom-12">
-        <p className="text-[16px] font-semibold">
-          <span className="text-foreground">R</span>
-          <span className="text-primary">oo</span>
-          <span className="text-foreground">tive</span>
-        </p>
+        <img src={logoRootive} alt="Rootive" className="h-[24px] object-contain" />
       </div>
     </div>
   );
