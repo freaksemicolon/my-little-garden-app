@@ -32,7 +32,7 @@ const Chat = () => {
     setInput("");
   };
 
-  const plantImage = plant?.image_url || plantSucculent;
+  const plantImage = plant?.image_url || plant3dSucculent;
   const plantName = plant?.nickname || "식물";
 
   if (!user) {

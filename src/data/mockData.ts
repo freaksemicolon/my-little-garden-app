@@ -1,6 +1,8 @@
-import plantMonstera from "@/assets/plant-monstera.png";
-import plantSucculent from "@/assets/plant-succulent.png";
-import plantCactus from "@/assets/plant-cactus.png";
+import plantPothos from "@/assets/plant-pothos.png";
+import plantSansevieria from "@/assets/plant-sansevieria.png";
+import plantSansevieria2 from "@/assets/plant-sansevieria-2.png";
+import plantOlive from "@/assets/plant-olive.png";
+import plant3d from "@/assets/plant-3d-succulent.png";
 
 // ============ User ============
 export interface User {

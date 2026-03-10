@@ -91,7 +91,7 @@ const NotificationSettings = () => {
         {/* 식물 푸시 알림 (Web Push) */}
         <div className="bg-card rounded-[16px] shadow-card px-4 py-4">
           <div className="flex items-center gap-3">
-            <span className="text-[28px]">🌱</span>
+            <img src={iconBellActive} alt="알림" className="w-[28px] h-[28px] object-contain" />
             <div className="flex-1">
               <span className="text-[16px] font-medium text-foreground">식물 알림 (푸시)</span>
               <p className="text-[12px] text-muted-foreground mt-0.5">
