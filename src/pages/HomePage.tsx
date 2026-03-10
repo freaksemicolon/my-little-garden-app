@@ -10,8 +10,6 @@ import iconBellActive from "@/assets/icon-bell-active.png";
 import iconTree from "@/assets/icon-tree.png";
 import iconSearchPlant from "@/assets/icon-search-plant.png";
 import iconCameraPlant from "@/assets/icon-camera-plant.png";
-import iconBellActive from "@/assets/icon-bell-active.png";
-import iconTree from "@/assets/icon-tree.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
