@@ -5,6 +5,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePlants, getWateringStatusFromPlant } from "@/hooks/usePlants";
 import { supabase } from "@/integrations/supabase/client";
+import logoMyLittleGarden from "@/assets/logo-mylittlegarden.png";
 
 const HomePage = () => {
   const navigate = useNavigate();
