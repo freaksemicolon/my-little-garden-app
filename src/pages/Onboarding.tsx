@@ -11,6 +11,7 @@ type PetOption = "있어요" | "없어요" | null;
 const Onboarding = () => {
   const [current, setCurrent] = useState(0);
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [touchStart, setTouchStart] = useState(0);
 
   // Slide 3 state
