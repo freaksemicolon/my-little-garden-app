@@ -17,8 +17,6 @@ const Login = () => {
       navigate("/home");
     }
   }, [user, authLoading, navigate]);
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
